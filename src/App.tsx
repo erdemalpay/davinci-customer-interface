@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
-import { Gamepad2, Coffee, MessageSquare, User, Clock, CheckCircle } from 'lucide-react';
+import {
+  CheckCircle,
+  Clock,
+  Coffee,
+  Gamepad2,
+  MessageSquare,
+  User,
+} from "lucide-react";
+import { useState } from "react";
 
 function App() {
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
 
   const handleGameMasterCall = () => {
-    setActiveRequest('gamemaster');
+    setActiveRequest("gamemaster");
     // Backend bağlantısı buraya eklenecek
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
   const handleServiceCall = () => {
-    setActiveRequest('service');
+    setActiveRequest("service");
     // Backend bağlantısı buraya eklenecek
     setTimeout(() => setActiveRequest(null), 3000);
   };
@@ -22,11 +29,11 @@ function App() {
   const handleFeedbackSubmit = () => {
     if (feedback.trim() && rating > 0) {
       // Backend bağlantısı buraya eklenecek
-      setActiveRequest('feedback');
+      setActiveRequest("feedback");
       setTimeout(() => {
         setActiveRequest(null);
         setShowFeedbackForm(false);
-        setFeedback('');
+        setFeedback("");
         setRating(0);
       }, 2000);
     }
@@ -38,7 +45,7 @@ function App() {
         key={index}
         onClick={() => setRating(index + 1)}
         className={`text-2xl transition-colors duration-200 ${
-          index < rating ? 'text-yellow-400' : 'text-gray-300'
+          index < rating ? "text-yellow-400" : "text-gray-300"
         } hover:text-yellow-400`}
       >
         ★
@@ -88,16 +95,16 @@ function App() {
               </p>
               <button
                 onClick={handleGameMasterCall}
-                disabled={activeRequest === 'gamemaster'}
+                disabled={activeRequest === "gamemaster"}
                 className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
               >
-                {activeRequest === 'gamemaster' ? (
+                {activeRequest === "gamemaster" ? (
                   <>
                     <Clock className="w-5 h-5 animate-spin" />
                     Çağrılıyor...
                   </>
                 ) : (
-                  'Game Master Çağır'
+                  "Game Master Çağır"
                 )}
               </button>
             </div>
@@ -109,24 +116,22 @@ function App() {
               <div className="bg-orange-500/20 rounded-full p-4 w-20 h-20 mx-auto mb-6 flex items-center justify-center">
                 <Coffee className="w-10 h-10 text-orange-400" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-3">
-                Servis
-              </h3>
+              <h3 className="text-2xl font-bold text-white mb-3">Servis</h3>
               <p className="text-blue-200 mb-6">
                 Sipariş vermek için servis elemanı çağırın
               </p>
               <button
                 onClick={handleServiceCall}
-                disabled={activeRequest === 'service'}
+                disabled={activeRequest === "service"}
                 className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
               >
-                {activeRequest === 'service' ? (
+                {activeRequest === "service" ? (
                   <>
                     <Clock className="w-5 h-5 animate-spin" />
                     Çağrılıyor...
                   </>
                 ) : (
-                  'Servis Çağır'
+                  "Servis Çağır"
                 )}
               </button>
             </div>
@@ -157,7 +162,11 @@ function App() {
         {/* Quick Status */}
         <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
           <p className="text-center text-blue-200">
-            🎮 Aktif Oyun Zamanı: {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
+            🎮 Aktif Oyun Zamanı:{" "}
+            {new Date().toLocaleTimeString("tr-TR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </p>
         </div>
       </div>
@@ -166,7 +175,7 @@ function App() {
       {showFeedbackForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-8 max-w-md w-full">
-            {activeRequest === 'feedback' ? (
+            {activeRequest === "feedback" ? (
               <div className="text-center">
                 <div className="bg-green-100 rounded-full p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
                   <CheckCircle className="w-10 h-10 text-green-600" />
@@ -183,7 +192,7 @@ function App() {
                 <h3 className="text-2xl font-bold text-gray-800 mb-6">
                   Geri Bildiriminiz
                 </h3>
-                
+
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Deneyiminizi değerlendirin:
