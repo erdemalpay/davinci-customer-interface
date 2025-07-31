@@ -1,34 +1,60 @@
-import {
-  CheckCircle,
-  Clock,
-  Coffee,
-  Gamepad2,
-  MessageSquare,
-  User,
-} from "lucide-react";
+import { CheckCircle, Clock, Coffee, MessageSquare, User } from "lucide-react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { ButtonCallTypeEnum } from "./types";
+import { callHelp, createFeedback } from "./utils/apis";
 
 function App() {
+  const { location, tableName } = useParams<{
+    location: string;
+    tableName: string;
+  }>();
+
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
-
+  if (!location || !tableName) {
+    return <div className="text-red-500">Invalid parameters</div>;
+  }
   const handleGameMasterCall = () => {
     setActiveRequest("gamemaster");
-    // Backend bağlantısı buraya eklenecek
+    callHelp({
+      location: Number(location),
+      type: ButtonCallTypeEnum.GAMEMASTERCALL,
+      tableName: tableName,
+      hour: new Date().toLocaleTimeString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+    });
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
   const handleServiceCall = () => {
     setActiveRequest("service");
-    // Backend bağlantısı buraya eklenecek
+    callHelp({
+      location: Number(location),
+      type: ButtonCallTypeEnum.ORDERCALL,
+      tableName: tableName,
+      hour: new Date().toLocaleTimeString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+    });
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
   const handleFeedbackSubmit = () => {
     if (feedback.trim() && rating > 0) {
-      // Backend bağlantısı buraya eklenecek
+      createFeedback({
+        location: 2, // this will be dynamic in a real app
+        tableName: "1", // this will be dynamic in a real app
+        starRating: rating,
+        comment: feedback,
+      });
       setActiveRequest("feedback");
       setTimeout(() => {
         setActiveRequest(null);
@@ -55,27 +81,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 text-6xl">🎲</div>
-        <div className="absolute top-20 right-20 text-4xl">♠️</div>
-        <div className="absolute bottom-20 left-20 text-5xl">♣️</div>
-        <div className="absolute bottom-10 right-10 text-6xl">🎯</div>
-        <div className="absolute top-1/2 left-1/4 text-3xl">♥️</div>
-        <div className="absolute top-1/3 right-1/3 text-4xl">♦️</div>
-      </div>
-
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Gamepad2 className="w-12 h-12 text-yellow-400" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Game Cafe
+              Da Vinci Board Game Cafe
             </h1>
           </div>
           <p className="text-xl text-blue-200">
-            Masa {Math.floor(Math.random() * 20) + 1} - Hoş Geldiniz!
+            Masa {tableName} - Hoş Geldiniz!
           </p>
         </div>
 
@@ -162,7 +177,7 @@ function App() {
         {/* Quick Status */}
         <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
           <p className="text-center text-blue-200">
-            🎮 Aktif Oyun Zamanı:{" "}
+            Aktif Oyun Zamanı:{" "}
             {new Date().toLocaleTimeString("tr-TR", {
               hour: "2-digit",
               minute: "2-digit",

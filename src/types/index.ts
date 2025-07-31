@@ -1,0 +1,5 @@
+export enum ButtonCallTypeEnum {
+  TABLECALL = "TABLECALL",
+  GAMEMASTERCALL = "GAMEMASTERCALL",
+  ORDERCALL = "ORDERCALL",
+}
