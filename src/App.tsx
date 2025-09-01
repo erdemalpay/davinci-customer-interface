@@ -103,7 +103,7 @@ function App() {
                 <User className="w-10 h-10 text-green-400" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">
-                Game Master
+                Oyun Yardımı
               </h3>
               <p className="text-blue-200 mb-6">
                 Oyun kuralları için yardım isteyin
@@ -131,9 +131,9 @@ function App() {
               <div className="bg-orange-500/20 rounded-full p-4 w-20 h-20 mx-auto mb-6 flex items-center justify-center">
                 <Coffee className="w-10 h-10 text-orange-400" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-3">Servis</h3>
+              <h3 className="text-2xl font-bold text-white mb-3">Sipariş</h3>
               <p className="text-blue-200 mb-6">
-                Sipariş vermek için servis elemanı çağırın
+                Sipariş vermek için servis personeli çağırın
               </p>
               <button
                 onClick={handleServiceCall}
@@ -146,7 +146,7 @@ function App() {
                     Çağrılıyor...
                   </>
                 ) : (
-                  "Servis Çağır"
+                  "Sipariş Ver"
                 )}
               </button>
             </div>
@@ -162,7 +162,7 @@ function App() {
                 Geri Bildirim
               </h3>
               <p className="text-blue-200 mb-6">
-                Deneyiminizi bizimle paylaşın
+                Memnun kaldınız mı? Deneyiminizi bizimle paylaşın
               </p>
               <button
                 onClick={() => setShowFeedbackForm(true)}
