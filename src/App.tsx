@@ -75,7 +75,7 @@ function App() {
         <LanguageToggle />
       </header>
 
-      <div className="relative z-10 flex flex-col items-center flex-1 p-3 md:p-6">
+      <div className="relative z-10 flex flex-col items-center flex-1 p-3 md:p-6 md:justify-center">
         {/* Header */}
         <div className="text-center mb-4 md:mb-12 mt-4 md:mt-0">
           <div className="flex items-center justify-center gap-3 mb-2 md:mb-4">
