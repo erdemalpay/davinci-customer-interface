@@ -2,11 +2,9 @@ import { Coffee, MessageSquare, Swords } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { ButtonCallTypeEnum } from "./types";
-import { callHelp, createFeedback } from "./utils/apis";
 import { Button } from "./components/Button";
-import { GenericCard } from "./components/GenericCard";
 import { FeedbackModal } from "./components/FeedbackModal";
+import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
 //import { ActiveTimeCard } from "./components/ActiveTimeCard";
 
@@ -22,45 +20,45 @@ function App() {
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
 
   if (!location || !tableName) {
-    return <div className="text-red-500">{t('errors.invalidParameters')}</div>;
+    return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
   }
   const handleGameMasterCall = () => {
     setActiveRequest("gamemaster");
-    callHelp({
-      location: Number(location),
-      type: ButtonCallTypeEnum.GAMEMASTERCALL,
-      tableName: tableName,
-      hour: new Date().toLocaleTimeString("tr-TR", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      }),
-    });
+    // callHelp({
+    //   location: Number(location),
+    //   type: ButtonCallTypeEnum.GAMEMASTERCALL,
+    //   tableName: tableName,
+    //   hour: new Date().toLocaleTimeString("tr-TR", {
+    //     hour: "2-digit",
+    //     minute: "2-digit",
+    //     second: "2-digit",
+    //   }),
+    // });
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
   const handleServiceCall = () => {
     setActiveRequest("service");
-    callHelp({
-      location: Number(location),
-      type: ButtonCallTypeEnum.ORDERCALL,
-      tableName: tableName,
-      hour: new Date().toLocaleTimeString("tr-TR", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      }),
-    });
+    // callHelp({
+    //   location: Number(location),
+    //   type: ButtonCallTypeEnum.ORDERCALL,
+    //   tableName: tableName,
+    //   hour: new Date().toLocaleTimeString("tr-TR", {
+    //     hour: "2-digit",
+    //     minute: "2-digit",
+    //     second: "2-digit",
+    //   }),
+    // });
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
-    createFeedback({
-      location: Number(location),
-      tableName: tableName,
-      starRating: rating,
-      comment: feedback,
-    });
+    // createFeedback({
+    //   location: Number(location),
+    //   tableName: tableName,
+    //   starRating: rating,
+    //   comment: feedback,
+    // });
     setFeedbackSuccess(true);
     setTimeout(() => {
       setFeedbackSuccess(false);
@@ -80,11 +78,11 @@ function App() {
         <div className="text-center mb-4 md:mb-12 mt-4 md:mt-0">
           <div className="flex items-center justify-center gap-3 mb-2 md:mb-4">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-germania text-dark-brown">
-              {t('header.title')}
+              {t("header.title")}
             </h1>
           </div>
           <p className="text-base md:text-xl font-merriweather text-dark-brown">
-            {t('header.welcome', { tableName })}
+            {t("header.welcome", { tableName })}
           </p>
         </div>
 
@@ -94,10 +92,10 @@ function App() {
           <GenericCard
             icon={Swords}
             iconColor="text-dark-brown"
-            title={t('gamemaster.title')}
-            description={t('gamemaster.description')}
-            mobileTitle={t('gamemaster.button')}
-            mobileLoadingTitle={t('gamemaster.calling')}
+            title={t("gamemaster.title")}
+            description={t("gamemaster.description")}
+            mobileTitle={t("gamemaster.button")}
+            mobileLoadingTitle={t("gamemaster.calling")}
             isLoading={activeRequest === "gamemaster"}
             showWalkingIcon={true}
             onMobileClick={handleGameMasterCall}
@@ -108,7 +106,9 @@ function App() {
               variant="primary"
               showWalkingIcon={activeRequest === "gamemaster"}
             >
-              {activeRequest === "gamemaster" ? t('gamemaster.calling') : t('gamemaster.button')}
+              {activeRequest === "gamemaster"
+                ? t("gamemaster.calling")
+                : t("gamemaster.button")}
             </Button>
           </GenericCard>
 
@@ -116,10 +116,10 @@ function App() {
           <GenericCard
             icon={Coffee}
             iconColor="text-dark-brown"
-            title={t('service.title')}
-            description={t('service.description')}
-            mobileTitle={t('service.button')}
-            mobileLoadingTitle={t('service.calling')}
+            title={t("service.title")}
+            description={t("service.description")}
+            mobileTitle={t("service.button")}
+            mobileLoadingTitle={t("service.calling")}
             isLoading={activeRequest === "service"}
             showWalkingIcon={true}
             onMobileClick={handleServiceCall}
@@ -130,7 +130,9 @@ function App() {
               variant="primary"
               showWalkingIcon={activeRequest === "service"}
             >
-              {activeRequest === "service" ? t('service.calling') : t('service.button')}
+              {activeRequest === "service"
+                ? t("service.calling")
+                : t("service.button")}
             </Button>
           </GenericCard>
 
@@ -138,17 +140,14 @@ function App() {
           <GenericCard
             icon={MessageSquare}
             iconColor="text-dark-brown"
-            title={t('feedback.title')}
-            description={t('feedback.description')}
-            mobileTitle={t('feedback.button')}
+            title={t("feedback.title")}
+            description={t("feedback.description")}
+            mobileTitle={t("feedback.button")}
             onMobileClick={() => setShowFeedbackForm(true)}
             flipMobileIcon={true}
           >
-            <Button
-              onClick={() => setShowFeedbackForm(true)}
-              variant="primary"
-            >
-              {t('feedback.button')}
+            <Button onClick={() => setShowFeedbackForm(true)} variant="primary">
+              {t("feedback.button")}
             </Button>
           </GenericCard>
         </div>
