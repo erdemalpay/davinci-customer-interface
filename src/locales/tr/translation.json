@@ -34,5 +34,8 @@
   },
   "errors": {
     "invalidParameters": "Invalid parameters"
-  }
+  },
+  "welcome": "Hoş Geldiniz",
+  "hello": "Merhaba",
+  "goodbye": "Güle Güle"
 }
