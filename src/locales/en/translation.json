@@ -1,0 +1,38 @@
+{
+  "header": {
+    "title": "Da Vinci Board Game Cafe",
+    "welcome": "Table {{tableName}} - Welcome!"
+  },
+  "gamemaster": {
+    "title": "Game Help",
+    "description": "Request help with game rules",
+    "button": "Call Game Master",
+    "calling": "Calling..."
+  },
+  "service": {
+    "title": "Order",
+    "description": "Call service staff to place an order",
+    "button": "Place Order",
+    "calling": "Calling..."
+  },
+  "feedback": {
+    "title": "Feedback",
+    "description": "Were you satisfied? Share your experience with us",
+    "button": "Give Feedback",
+    "modalTitle": "Your Feedback",
+    "rateLabel": "Rate your experience:",
+    "commentLabel": "Your comment:",
+    "commentPlaceholder": "Share your experience with us...",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "successTitle": "Thank you!",
+    "successMessage": "Your feedback has been successfully submitted.",
+    "warning": "Please rate and write something"
+  },
+  "status": {
+    "activeTime": "Active Game Time:"
+  },
+  "errors": {
+    "invalidParameters": "Invalid parameters"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "header": {
+    "title": "Da Vinci Board Game Cafe",
+    "welcome": "Masa {{tableName}} - Hoş Geldiniz!"
+  },
+  "gamemaster": {
+    "title": "Oyun Yardımı",
+    "description": "Oyun kuralları için yardım isteyin",
+    "button": "Game Master Çağır",
+    "calling": "Çağrılıyor..."
+  },
+  "service": {
+    "title": "Sipariş",
+    "description": "Sipariş vermek için servis personeli çağırın",
+    "button": "Sipariş Ver",
+    "calling": "Çağrılıyor..."
+  },
+  "feedback": {
+    "title": "Geri Bildirim",
+    "description": "Memnun kaldınız mı? Deneyiminizi bizimle paylaşın",
+    "button": "Geri Bildirim Ver",
+    "modalTitle": "Geri Bildiriminiz",
+    "rateLabel": "Deneyiminizi değerlendirin:",
+    "commentLabel": "Yorumunuz:",
+    "commentPlaceholder": "Deneyiminizi bizimle paylaşın...",
+    "cancel": "İptal",
+    "submit": "Gönder",
+    "successTitle": "Teşekkürler!",
+    "successMessage": "Geri bildiriminiz başarıyla gönderildi.",
+    "warning": "Lütfen yıldız verin ve bir şeyler yazın"
+  },
+  "status": {
+    "activeTime": "Aktif Oyun Zamanı:"
+  },
+  "errors": {
+    "invalidParameters": "Invalid parameters"
+  }
+}
