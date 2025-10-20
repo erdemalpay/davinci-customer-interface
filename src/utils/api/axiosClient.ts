@@ -2,7 +2,7 @@ import axios, { AxiosHeaders } from "axios";
 import Cookies from "js-cookie";
 
 export const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   responseType: "json",
 });
 

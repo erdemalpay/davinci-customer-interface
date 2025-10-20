@@ -6,6 +6,9 @@ import { Button } from "./components/Button";
 import { FeedbackModal } from "./components/FeedbackModal";
 import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
+import { ButtonCallTypeEnum } from "./types";
+import { useButtonCallMutations } from "./utils/api/buttonCall";
+import { useFeedbackMutations } from "./utils/api/feedback";
 //import { ActiveTimeCard } from "./components/ActiveTimeCard";
 
 function App() {
@@ -18,47 +21,48 @@ function App() {
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
-
+  const { createFeedback } = useFeedbackMutations();
+  const { createButtonCall } = useButtonCallMutations();
   if (!location || !tableName) {
     return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
   }
   const handleGameMasterCall = () => {
     setActiveRequest("gamemaster");
-    // callHelp({
-    //   location: Number(location),
-    //   type: ButtonCallTypeEnum.GAMEMASTERCALL,
-    //   tableName: tableName,
-    //   hour: new Date().toLocaleTimeString("tr-TR", {
-    //     hour: "2-digit",
-    //     minute: "2-digit",
-    //     second: "2-digit",
-    //   }),
-    // });
+    createButtonCall({
+      location: Number(location),
+      type: ButtonCallTypeEnum.GAMEMASTERCALL,
+      tableName: tableName,
+      hour: new Date().toLocaleTimeString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+    });
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
   const handleServiceCall = () => {
     setActiveRequest("service");
-    // callHelp({
-    //   location: Number(location),
-    //   type: ButtonCallTypeEnum.ORDERCALL,
-    //   tableName: tableName,
-    //   hour: new Date().toLocaleTimeString("tr-TR", {
-    //     hour: "2-digit",
-    //     minute: "2-digit",
-    //     second: "2-digit",
-    //   }),
-    // });
+    createButtonCall({
+      location: Number(location),
+      type: ButtonCallTypeEnum.ORDERCALL,
+      tableName: tableName,
+      hour: new Date().toLocaleTimeString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+    });
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
-    // createFeedback({
-    //   location: Number(location),
-    //   tableName: tableName,
-    //   starRating: rating,
-    //   comment: feedback,
-    // });
+    createFeedback({
+      location: Number(location),
+      tableName: tableName,
+      starRating: rating,
+      comment: feedback,
+    });
     setFeedbackSuccess(true);
     setTimeout(() => {
       setFeedbackSuccess(false);
