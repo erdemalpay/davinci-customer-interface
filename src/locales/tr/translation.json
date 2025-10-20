@@ -37,5 +37,10 @@
   },
   "welcome": "Hoş Geldiniz",
   "hello": "Merhaba",
-  "goodbye": "Güle Güle"
+  "goodbye": "Güle Güle",
+  "queue": {
+    "waitingCount": "Sırada {{count}} masa var",
+    "noWait": "Bekleyen masa yok",
+    "yourTurn": "Sıra sizde!"
+  }
 }
