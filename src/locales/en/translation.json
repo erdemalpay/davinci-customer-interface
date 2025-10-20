@@ -37,5 +37,10 @@
   },
   "welcome": "Welcome",
   "hello": "Hello",
-  "goodbye": "Goodbye"
+  "goodbye": "Goodbye",
+  "queue": {
+    "waitingCount": "{{count}} table{{count > 1 ? 's' : ''}} ahead in the queue",
+    "noWait": "No waiting tables",
+    "yourTurn": "It's your turn!"
+  }
 }

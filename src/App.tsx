@@ -6,13 +6,14 @@ import { Button } from "./components/Button";
 import { FeedbackModal } from "./components/FeedbackModal";
 import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
+import { useWebSocket } from "./hooks/useWebSocket";
 import { ButtonCallTypeEnum } from "./types";
-import { useButtonCallMutations } from "./utils/api/buttonCall";
+import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
-//import { ActiveTimeCard } from "./components/ActiveTimeCard";
 
 function App() {
   const { t } = useTranslation();
+  useWebSocket();
   const { location, tableName } = useParams<{
     location: string;
     tableName: string;
@@ -23,9 +24,11 @@ function App() {
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const { createFeedback } = useFeedbackMutations();
   const { createButtonCall } = useButtonCallMutations();
+  const queue = useGetQueue(Number(location), tableName ?? "");
   if (!location || !tableName) {
     return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
   }
+
   const handleGameMasterCall = () => {
     setActiveRequest("gamemaster");
     createButtonCall({
@@ -70,15 +73,16 @@ function App() {
     }, 2000);
   };
 
+  const gmQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
+  const svcQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
+
   return (
     <div className="min-h-screen bg-cream-bg relative overflow-hidden flex flex-col">
-      {/* Header with Language Toggle */}
       <header className="relative z-50 flex justify-end items-center pt-4 pb-2 md:py-4 px-6">
         <LanguageToggle />
       </header>
 
       <div className="relative z-10 flex flex-col items-center flex-1 p-3 md:p-6 md:justify-center">
-        {/* Header */}
         <div className="text-center mb-4 md:mb-12 mt-4 md:mt-0">
           <div className="flex items-center justify-center gap-3 mb-2 md:mb-4">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-germania text-dark-brown">
@@ -90,9 +94,12 @@ function App() {
           </p>
         </div>
 
-        {/* Main Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl w-full">
-          {/* Game Master Call */}
+        <div
+          key={`${
+            queue?.[ButtonCallTypeEnum.GAMEMASTERCALL]?.waitingCount ?? ""
+          }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl w-full"
+        >
           <GenericCard
             icon={Swords}
             iconColor="text-dark-brown"
@@ -104,19 +111,30 @@ function App() {
             showWalkingIcon={true}
             onMobileClick={handleGameMasterCall}
           >
-            <Button
-              onClick={handleGameMasterCall}
-              disabled={activeRequest === "gamemaster"}
-              variant="primary"
-              showWalkingIcon={activeRequest === "gamemaster"}
-            >
-              {activeRequest === "gamemaster"
-                ? t("gamemaster.calling")
-                : t("gamemaster.button")}
-            </Button>
+            {gmQueue?.isQueued && gmQueue.position === 1 ? (
+              <div className="mb-2 text-sm text-green-700">
+                {t("queue.yourTurn")}
+              </div>
+            ) : gmQueue?.waitingCount && gmQueue.waitingCount > 0 ? (
+              <div className="mb-2 text-sm">
+                {t("queue.waitingCount", {
+                  count: gmQueue.waitingCount,
+                })}
+              </div>
+            ) : (
+              <Button
+                onClick={handleGameMasterCall}
+                disabled={activeRequest === "gamemaster"}
+                variant="primary"
+                showWalkingIcon={activeRequest === "gamemaster"}
+              >
+                {activeRequest === "gamemaster"
+                  ? t("gamemaster.calling")
+                  : t("gamemaster.button")}
+              </Button>
+            )}
           </GenericCard>
 
-          {/* Service Call */}
           <GenericCard
             icon={Coffee}
             iconColor="text-dark-brown"
@@ -128,19 +146,30 @@ function App() {
             showWalkingIcon={true}
             onMobileClick={handleServiceCall}
           >
-            <Button
-              onClick={handleServiceCall}
-              disabled={activeRequest === "service"}
-              variant="primary"
-              showWalkingIcon={activeRequest === "service"}
-            >
-              {activeRequest === "service"
-                ? t("service.calling")
-                : t("service.button")}
-            </Button>
+            {svcQueue?.isQueued && svcQueue.position === 1 ? (
+              <div className="mb-2 text-sm text-green-700">
+                {t("queue.yourTurn")}
+              </div>
+            ) : svcQueue?.waitingCount && svcQueue.waitingCount > 0 ? (
+              <div className="mb-2 text-sm">
+                {t("queue.waitingCount", {
+                  count: svcQueue.waitingCount,
+                })}
+              </div>
+            ) : (
+              <Button
+                onClick={handleServiceCall}
+                disabled={activeRequest === "service"}
+                variant="primary"
+                showWalkingIcon={activeRequest === "service"}
+              >
+                {activeRequest === "service"
+                  ? t("service.calling")
+                  : t("service.button")}
+              </Button>
+            )}
           </GenericCard>
 
-          {/* Feedback */}
           <GenericCard
             icon={MessageSquare}
             iconColor="text-dark-brown"
@@ -157,13 +186,6 @@ function App() {
         </div>
       </div>
 
-      {/* Active Time - Fixed at bottom
-      <div className="relative z-10 flex justify-center pb-4 md:pb-8 px-3 md:px-6">
-        <ActiveTimeCard />
-      </div>
-      */}
-
-      {/* Feedback Modal */}
       <FeedbackModal
         isOpen={showFeedbackForm}
         onClose={() => setShowFeedbackForm(false)}

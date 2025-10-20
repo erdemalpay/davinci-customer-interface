@@ -27,3 +27,7 @@ export type ButtonCall = {
   duration?: number;
   callCount: number;
 };
+export interface SocketEventType {
+  event: string;
+  invalidateKeys: string[];
+}
