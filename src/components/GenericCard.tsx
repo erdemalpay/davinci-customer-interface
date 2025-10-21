@@ -49,21 +49,21 @@ export function GenericCard({
       <div className="text-center flex flex-col flex-1 relative z-10 justify-center pl-4 md:pl-0">
         {/* Icon - only visible on desktop */}
         {Icon && (
-          <div className="hidden md:flex mx-auto mb-3 md:mb-6 items-center justify-center">
+          <div className="hidden md:flex mx-auto mb-4 md:mb-6 items-center justify-center">
             <Icon className="w-6 h-6 md:w-10 md:h-10 text-light-brown" />
           </div>
         )}
 
         {/* Desktop title */}
         {title && (
-          <h3 className="hidden md:block text-lg md:text-2xl font-merriweather text-light-brown mb-2 md:mb-3">
+          <h3 className="hidden md:block text-lg md:text-2xl font-merriweather text-light-brown mb-4">
             {title}
           </h3>
         )}
 
         {/* Mobile title (from button text) with walking icon */}
         {(title || mobileTitle) && (
-          <h3 className="block md:hidden text-xl font-merriweather text-light-brown flex items-center justify-center gap-2">
+          <h3 className="block md:hidden text-xl font-merriweather text-light-brown flex items-center justify-center gap-2 mb-4">
             {isLoading && showWalkingIcon && (
               <WalkingIcon className="w-6 h-6" />
             )}
@@ -72,14 +72,14 @@ export function GenericCard({
         )}
 
         {description && (
-          <p className="text-xs md:text-base text-light-brown/90 font-merriweather mb-3 md:mb-6 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
+          <p className="text-sm text-light-brown/90 font-merriweather mb-4 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
             {description}
           </p>
         )}
 
-        {/* Button - only visible on desktop */}
+        {/* Queue messages and Button */}
         {children && (
-          <div className="mt-auto hidden md:block">
+          <div className="md:mt-auto [&>button]:hidden md:[&>button]:block">
             {children}
           </div>
         )}

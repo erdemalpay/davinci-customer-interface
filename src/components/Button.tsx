@@ -32,16 +32,18 @@ export function Button({
     <button
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`w-full py-2 md:py-3 px-4 md:px-6 font-merriweather rounded-xl transition-all duration-200 hover:scale-105 hover:drop-shadow-lg flex items-center justify-center gap-2 text-sm md:text-base ${
+      className={`w-full py-2 md:py-3 px-4 md:px-6 font-merriweather rounded-xl transition-all duration-200 hover:scale-105 hover:drop-shadow-lg text-sm md:text-base ${
         variantStyles[variant]
       } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${className}`}
     >
-      {showWalkingIcon ? (
-        <WalkingIcon />
-      ) : Icon ? (
-        <Icon className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
-      ) : null}
-      <span className="leading-tight">{children}</span>
+      <div className="flex items-center justify-center gap-2">
+        {showWalkingIcon ? (
+          <WalkingIcon />
+        ) : Icon ? (
+          <Icon className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+        ) : null}
+        <span className="whitespace-nowrap">{children}</span>
+      </div>
     </button>
   );
 }

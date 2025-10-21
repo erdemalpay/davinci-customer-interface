@@ -78,6 +78,17 @@ function App() {
 
   return (
     <div className="min-h-screen bg-cream-bg relative overflow-hidden flex flex-col">
+      {/* Background pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.025] pointer-events-none"
+        style={{
+          backgroundImage: `url('/src/assets/images/logo.png')`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '200px auto',
+          filter: 'grayscale(1) brightness(0.5)',
+        }}
+      />
+
       <header className="relative z-50 flex justify-end items-center pt-4 pb-2 md:py-4 px-6">
         <LanguageToggle />
       </header>
@@ -112,11 +123,11 @@ function App() {
             onMobileClick={handleGameMasterCall}
           >
             {gmQueue?.isQueued && gmQueue.position === 1 ? (
-              <div className="mb-2 text-sm text-green-700">
+              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
             ) : gmQueue?.waitingCount && gmQueue.waitingCount > 0 ? (
-              <div className="mb-2 text-sm">
+              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
                 {t("queue.waitingCount", {
                   count: gmQueue.waitingCount,
                 })}
@@ -147,11 +158,11 @@ function App() {
             onMobileClick={handleServiceCall}
           >
             {svcQueue?.isQueued && svcQueue.position === 1 ? (
-              <div className="mb-2 text-sm text-green-700">
+              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
             ) : svcQueue?.waitingCount && svcQueue.waitingCount > 0 ? (
-              <div className="mb-2 text-sm">
+              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
                 {t("queue.waitingCount", {
                   count: svcQueue.waitingCount,
                 })}

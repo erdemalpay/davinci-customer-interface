@@ -10,7 +10,7 @@ export default {
       colors: {
         'light-brown': '#F7D8B9',
         'dark-brown': '#614222',
-        'cream-bg': '#FBEEE2',
+        'cream-bg': '#EFE0CF',
       },
     },
   },
