@@ -6,18 +6,18 @@
   "gamemaster": {
     "title": "Game Help",
     "description": "Request help with game rules",
-    "button": "Call Game Master",
+    "button": "Call the Game Master",
     "calling": "Calling..."
   },
   "service": {
     "title": "Order",
     "description": "Call service staff to place an order",
-    "button": "Place Order",
+    "button": "Place an Order",
     "calling": "Calling..."
   },
   "feedback": {
     "title": "Feedback",
-    "description": "Were you satisfied? Share your experience with us",
+    "description": "Were you satisfied? Share your experience with us!",
     "button": "Give Feedback",
     "modalTitle": "Your Feedback",
     "rateLabel": "Rate your experience:",
@@ -27,7 +27,7 @@
     "submit": "Submit",
     "successTitle": "Thank you!",
     "successMessage": "Your feedback has been successfully submitted.",
-    "warning": "Please rate and write something"
+    "warning": "Please provide a rating and comment"
   },
   "status": {
     "activeTime": "Active Game Time:"
@@ -39,8 +39,9 @@
   "hello": "Hello",
   "goodbye": "Goodbye",
   "queue": {
-    "waitingCount": "{{count}} table{{count > 1 ? 's' : ''}} ahead in the queue",
-    "noWait": "No waiting tables",
+    "waitingCount_one": "{{count}} table ahead in the queue",
+    "waitingCount_other": "{{count}} tables ahead in the queue",
+    "noWait": "No wait",
     "yourTurn": "It's your turn!"
   }
 }
