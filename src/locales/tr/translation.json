@@ -39,7 +39,7 @@
   "hello": "Merhaba",
   "goodbye": "Güle Güle",
   "queue": {
-    "waitingCount": "Sırada {{count}} masa var",
+    "waitingCount": "{{count}} sıradasınız..",
     "noWait": "Bekleyen masa yok",
     "yourTurn": "Sıra sizde!"
   }
