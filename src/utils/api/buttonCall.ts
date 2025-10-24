@@ -14,7 +14,7 @@ export interface QueuePayload {
   totalActive: number;
 }
 export type QueueResponse = Record<string, QueuePayload>;
-
+//deneme
 export function useButtonCallMutations() {
   const { createItem: createButtonCall } = useMutationApi<ButtonCallInput>({
     baseQuery: baseUrl,
