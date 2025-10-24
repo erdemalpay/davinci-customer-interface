@@ -14,6 +14,9 @@ interface GenericCardProps {
   mobileLoadingTitle?: string;
   isLoading?: boolean;
   showWalkingIcon?: boolean;
+  showCancelButton?: boolean;
+  onCancelClick?: () => void;
+  cancelButtonText?: string;
 }
 
 export function GenericCard({
@@ -27,11 +30,16 @@ export function GenericCard({
   mobileLoadingTitle,
   isLoading = false,
   showWalkingIcon = false,
+  showCancelButton = false,
+  onCancelClick,
+  cancelButtonText = "cancel",
 }: GenericCardProps): JSX.Element {
+  const shouldDisableMobileClick = showCancelButton;
+
   return (
     <div
-      className="relative bg-dark-brown backdrop-blur-sm rounded-xl p-6 md:p-8 border border-dark-brown/50 shadow-lg flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden md:cursor-default cursor-pointer transition-all duration-150 active:scale-90 active:shadow-md md:active:scale-100 md:active:shadow-lg"
-      onClick={onMobileClick ? (e) => {
+      className={`relative bg-dark-brown backdrop-blur-sm rounded-xl p-6 md:p-8 border border-dark-brown/50 shadow-lg flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden md:cursor-default ${shouldDisableMobileClick ? 'cursor-default' : 'cursor-pointer'} transition-all duration-150 ${shouldDisableMobileClick ? '' : 'active:scale-90 active:shadow-md'} md:active:scale-100 md:active:shadow-lg`}
+      onClick={onMobileClick && !shouldDisableMobileClick ? (e) => {
         // Only trigger on mobile (check if button is hidden)
         const target = e.target as HTMLElement;
         if (window.innerWidth < 768 && !target.closest('button')) {
@@ -82,6 +90,19 @@ export function GenericCard({
           <div className="md:mt-auto [&>button]:hidden md:[&>button]:block">
             {children}
           </div>
+        )}
+
+        {/* Cancel Button */}
+        {showCancelButton && onCancelClick && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onCancelClick();
+            }}
+            className="mt-3 px-4 py-2 text-base font-merriweather bg-light-brown hover:bg-light-brown/80 text-dark-brown rounded-lg transition-all duration-200 active:scale-95"
+          >
+            {cancelButtonText}
+          </button>
         )}
       </div>
     </div>

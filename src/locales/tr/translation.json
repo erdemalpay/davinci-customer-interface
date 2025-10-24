@@ -42,5 +42,6 @@
     "waitingCount": "Sırada {{count}} masa var",
     "noWait": "Bekleyen masa yok",
     "yourTurn": "Sıra sizde!"
-  }
+  },
+  "cancel": "İptal"
 }

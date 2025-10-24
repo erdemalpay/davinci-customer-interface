@@ -1,5 +1,6 @@
-import { ButtonCall } from "../../types";
+import { ButtonCall, CloseButtonCallInput } from "../../types";
 import { Paths, useGet, useMutationApi } from "./factory";
+import { post } from ".";
 
 const baseUrl = `${Paths.ButtonCalls}`;
 
@@ -19,7 +20,14 @@ export function useButtonCallMutations() {
     baseQuery: baseUrl,
   });
 
-  return { createButtonCall };
+  const closeButtonCallFromPanel = (payload: CloseButtonCallInput) => {
+    return post<CloseButtonCallInput, ButtonCall>({
+      path: `${baseUrl}/close-from-panel`,
+      payload,
+    });
+  };
+
+  return { createButtonCall, closeButtonCallFromPanel };
 }
 export function useGetQueue(location: number, tableName: string) {
   const queryString = new URLSearchParams({
