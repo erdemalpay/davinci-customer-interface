@@ -39,9 +39,8 @@
   "hello": "Hello",
   "goodbye": "Goodbye",
   "queue": {
-    "waitingCount_one": "{{count}} table ahead in the queue",
-    "waitingCount_other": "{{count}} tables ahead in the queue",
+    "waitingCount": "You are in {{count}} place",
     "noWait": "No wait",
-    "yourTurn": "It's your turn!"
+    "yourTurn": "You're next!"
   }
 }
