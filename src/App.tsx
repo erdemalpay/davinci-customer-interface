@@ -7,7 +7,7 @@ import { FeedbackModal } from "./components/FeedbackModal";
 import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { useWebSocket } from "./hooks/useWebSocket";
-import { ButtonCallTypeEnum } from "./types";
+import { ButtonCallTypeEnum, LocationEnum } from "./types";
 import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
 
@@ -25,9 +25,23 @@ function App() {
   const { createFeedback } = useFeedbackMutations();
   const { createButtonCall, closeButtonCallFromPanel } = useButtonCallMutations();
   const queue = useGetQueue(Number(location), tableName ?? "");
+
   if (!location || !tableName) {
     return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
   }
+
+  const getLocationName = (locationId: number): string => {
+    switch (locationId) {
+      case LocationEnum.BAHCELI:
+        return "Bahçeli";
+      case LocationEnum.NEORAMA:
+        return "Neorama";
+      default:
+        return "";
+    }
+  };
+
+  const locationName = getLocationName(Number(location));
 
   const handleGameMasterCall = () => {
     setActiveRequest("gamemaster");
@@ -117,7 +131,7 @@ function App() {
             </h1>
           </div>
           <p className="text-base md:text-xl font-merriweather text-dark-brown">
-            {t("header.welcome", { tableName })}
+            {t("header.welcome", { locationName, tableName })}
           </p>
         </div>
 
