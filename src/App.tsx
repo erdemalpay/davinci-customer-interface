@@ -10,9 +10,10 @@ import { useWebSocket } from "./hooks/useWebSocket";
 import { ButtonCallTypeEnum } from "./types";
 import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
+import { getOrdinal } from "./utils/ordinal";
 
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   useWebSocket();
   const { location, tableName } = useParams<{
     location: string;
@@ -89,8 +90,8 @@ function App() {
     }, 2000);
   };
 
-  const gmQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
-  const svcQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
+  const gameMasterQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
+  const serviceQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
 
   return (
     <div className="min-h-screen bg-cream-bg relative overflow-hidden flex flex-col">
@@ -141,15 +142,18 @@ function App() {
             onCancelClick={() => handleCancelRequest("gamemaster")}
             cancelButtonText={t("cancel")}
           >
-            {gmQueue?.isQueued && gmQueue.position === 1 ? (
+            {gameMasterQueue?.isQueued && gameMasterQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
-            ) : gmQueue?.waitingCount && gmQueue.waitingCount > 0 ? (
+            ) : gameMasterQueue?.waitingCount && gameMasterQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
-                {t("queue.waitingCount", {
-                  count: gmQueue.waitingCount,
-                })}
+                {t("queue.waitingCount").replace(
+                  "{{count}}",
+                  i18n.language === "en"
+                    ? getOrdinal(gameMasterQueue.waitingCount + 1)
+                    : `${gameMasterQueue.waitingCount + 1}.`
+                )}
               </div>
             ) : (
               <Button
@@ -179,15 +183,18 @@ function App() {
             onCancelClick={() => handleCancelRequest("service")}
             cancelButtonText={t("cancel")}
           >
-            {svcQueue?.isQueued && svcQueue.position === 1 ? (
+            {serviceQueue?.isQueued && serviceQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
-            ) : svcQueue?.waitingCount && svcQueue.waitingCount > 0 ? (
+            ) : serviceQueue?.waitingCount && serviceQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
-                {t("queue.waitingCount", {
-                  count: svcQueue.waitingCount,
-                })}
+                {t("queue.waitingCount").replace(
+                  "{{count}}",
+                  i18n.language === "en"
+                    ? getOrdinal(serviceQueue.waitingCount + 1)
+                    : `${serviceQueue.waitingCount + 1}.`
+                )}
               </div>
             ) : (
               <Button
