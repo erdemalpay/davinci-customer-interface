@@ -1,4 +1,4 @@
-import { Coffee, MessageSquare, Swords } from "lucide-react";
+import { Coffee, MessageSquare, Swords, UtensilsCrossed } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -89,6 +89,11 @@ function App() {
     setActiveRequest(null);
   };
 
+  const handleMenuClick = () => {
+    const menuUrl = `https://menu.davinciboardgame.com/${location}`; //Burayı ortam değişkeni olarak da tanımlayabiliriz??
+    window.open(menuUrl, '_blank');
+  };
+
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
     createFeedback({
       location: Number(location),
@@ -139,22 +144,23 @@ function App() {
           key={`${
             queue?.[ButtonCallTypeEnum.GAMEMASTERCALL]?.waitingCount ?? ""
           }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl w-full"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
         >
-          <GenericCard
-            icon={Swords}
-            iconColor="text-dark-brown"
-            title={t("gamemaster.title")}
-            description={t("gamemaster.description")}
-            mobileTitle={t("gamemaster.button")}
-            mobileLoadingTitle={t("gamemaster.calling")}
-            isLoading={activeRequest === "gamemaster"}
-            showWalkingIcon={true}
-            onMobileClick={handleGameMasterCall}
-            showCancelButton={gmQueue?.isQueued || false}
-            onCancelClick={() => handleCancelRequest("gamemaster")}
-            cancelButtonText={t("cancel")}
-          >
+          <div className="col-span-2 md:col-span-1">
+            <GenericCard
+              icon={Swords}
+              iconColor="text-dark-brown"
+              title={t("gamemaster.title")}
+              description={t("gamemaster.description")}
+              mobileTitle={t("gamemaster.button")}
+              mobileLoadingTitle={t("gamemaster.calling")}
+              isLoading={activeRequest === "gamemaster"}
+              showWalkingIcon={true}
+              onMobileClick={handleGameMasterCall}
+              showCancelButton={gmQueue?.isQueued || false}
+              onCancelClick={() => handleCancelRequest("gamemaster")}
+              cancelButtonText={t("cancel")}
+            >
             {gmQueue?.isQueued && gmQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
@@ -177,22 +183,24 @@ function App() {
                   : t("gamemaster.button")}
               </Button>
             )}
-          </GenericCard>
+            </GenericCard>
+          </div>
 
-          <GenericCard
-            icon={Coffee}
-            iconColor="text-dark-brown"
-            title={t("service.title")}
-            description={t("service.description")}
-            mobileTitle={t("service.button")}
-            mobileLoadingTitle={t("service.calling")}
-            isLoading={activeRequest === "service"}
-            showWalkingIcon={true}
-            onMobileClick={handleServiceCall}
-            showCancelButton={svcQueue?.isQueued || false}
-            onCancelClick={() => handleCancelRequest("service")}
-            cancelButtonText={t("cancel")}
-          >
+          <div className="col-span-1 md:col-span-1">
+            <GenericCard
+              icon={Coffee}
+              iconColor="text-dark-brown"
+              title={t("service.title")}
+              description={t("service.description")}
+              mobileTitle={t("service.button")}
+              mobileLoadingTitle={t("service.calling")}
+              isLoading={activeRequest === "service"}
+              showWalkingIcon={true}
+              onMobileClick={handleServiceCall}
+              showCancelButton={svcQueue?.isQueued || false}
+              onCancelClick={() => handleCancelRequest("service")}
+              cancelButtonText={t("cancel")}
+            >
             {svcQueue?.isQueued && svcQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
@@ -215,21 +223,39 @@ function App() {
                   : t("service.button")}
               </Button>
             )}
-          </GenericCard>
+            </GenericCard>
+          </div>
 
-          <GenericCard
-            icon={MessageSquare}
-            iconColor="text-dark-brown"
-            title={t("feedback.title")}
-            description={t("feedback.description")}
-            mobileTitle={t("feedback.button")}
-            onMobileClick={() => setShowFeedbackForm(true)}
-            flipMobileIcon={true}
-          >
+          <div className="col-span-1 md:col-span-1">
+            <GenericCard
+              icon={UtensilsCrossed}
+              iconColor="text-dark-brown"
+              title={t("menu.title")}
+              description={t("menu.description")}
+              mobileTitle={t("menu.button")}
+              onMobileClick={handleMenuClick}
+            >
+              <Button onClick={handleMenuClick} variant="primary">
+                {t("menu.button")}
+              </Button>
+            </GenericCard>
+          </div>
+
+          <div className="col-span-2 md:col-span-1">
+            <GenericCard
+              icon={MessageSquare}
+              iconColor="text-dark-brown"
+              title={t("feedback.title")}
+              description={t("feedback.description")}
+              mobileTitle={t("feedback.button")}
+              onMobileClick={() => setShowFeedbackForm(true)}
+              flipMobileIcon={true}
+            >
             <Button onClick={() => setShowFeedbackForm(true)} variant="primary">
               {t("feedback.button")}
             </Button>
-          </GenericCard>
+            </GenericCard>
+          </div>
         </div>
       </div>
 

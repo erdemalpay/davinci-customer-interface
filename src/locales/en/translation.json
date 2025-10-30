@@ -15,6 +15,11 @@
     "button": "Place an Order",
     "calling": "Calling..."
   },
+  "menu": {
+    "title": "Menu",
+    "description": "View our menu",
+    "button": "View Menu"
+  },
   "feedback": {
     "title": "Feedback",
     "description": "Were you satisfied? Share your experience with us!",

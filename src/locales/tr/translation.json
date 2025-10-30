@@ -15,6 +15,11 @@
     "button": "Sipariş Ver",
     "calling": "Çağrılıyor..."
   },
+  "menu": {
+    "title": "Menü",
+    "description": "Menümüzü görüntüleyin",
+    "button": "Menüyü Gör"
+  },
   "feedback": {
     "title": "Geri Bildirim",
     "description": "Memnun kaldınız mı? Deneyiminizi bizimle paylaşın",
