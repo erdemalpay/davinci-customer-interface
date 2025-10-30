@@ -42,5 +42,6 @@
     "waitingCount": "{{count}} sıradasınız..",
     "noWait": "Bekleyen masa yok",
     "yourTurn": "Sıra sizde!"
-  }
+  },
+  "cancel": "İptal"
 }

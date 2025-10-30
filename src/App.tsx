@@ -24,7 +24,7 @@ function App() {
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const { createFeedback } = useFeedbackMutations();
-  const { createButtonCall } = useButtonCallMutations();
+  const { createButtonCall, closeButtonCallFromPanel } = useButtonCallMutations();
   const queue = useGetQueue(Number(location), tableName ?? "");
   if (!location || !tableName) {
     return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
@@ -58,6 +58,22 @@ function App() {
       }),
     });
     setTimeout(() => setActiveRequest(null), 3000);
+  };
+
+  const handleCancelRequest = (type: "gamemaster" | "service") => {
+    closeButtonCallFromPanel({
+      location: Number(location),
+      tableName: tableName,
+      hour: new Date().toLocaleTimeString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+      type: type === "gamemaster"
+        ? ButtonCallTypeEnum.GAMEMASTERCALL
+        : ButtonCallTypeEnum.ORDERCALL,
+    });
+    setActiveRequest(null);
   };
 
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
@@ -122,6 +138,9 @@ function App() {
             isLoading={activeRequest === "gamemaster"}
             showWalkingIcon={true}
             onMobileClick={handleGameMasterCall}
+            showCancelButton={gmQueue?.isQueued || false}
+            onCancelClick={() => handleCancelRequest("gamemaster")}
+            cancelButtonText={t("cancel")}
           >
             {gameMasterQueue?.isQueued && gameMasterQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
@@ -160,6 +179,9 @@ function App() {
             isLoading={activeRequest === "service"}
             showWalkingIcon={true}
             onMobileClick={handleServiceCall}
+            showCancelButton={svcQueue?.isQueued || false}
+            onCancelClick={() => handleCancelRequest("service")}
+            cancelButtonText={t("cancel")}
           >
             {serviceQueue?.isQueued && serviceQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">

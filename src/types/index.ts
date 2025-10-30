@@ -31,3 +31,10 @@ export interface SocketEventType {
   event: string;
   invalidateKeys: string[];
 }
+
+export interface CloseButtonCallInput {
+  tableName: string;
+  location: number;
+  hour: string;
+  type: ButtonCallTypeEnum;
+}

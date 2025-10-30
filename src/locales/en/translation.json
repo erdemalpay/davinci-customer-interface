@@ -42,5 +42,6 @@
     "waitingCount": "You are in {{count}} place",
     "noWait": "No wait",
     "yourTurn": "You're next!"
-  }
+  },
+  "cancel": "Cancel"
 }
