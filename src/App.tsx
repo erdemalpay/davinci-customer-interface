@@ -1,4 +1,4 @@
-import { Coffee, MessageSquare, Swords } from "lucide-react";
+import { Coffee, MessageSquare, Swords, UtensilsCrossed } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import { FeedbackModal } from "./components/FeedbackModal";
 import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { useWebSocket } from "./hooks/useWebSocket";
-import { ButtonCallTypeEnum } from "./types";
+import { ButtonCallTypeEnum, LocationEnum } from "./types";
 import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
 import { getOrdinal } from "./utils/ordinal";
@@ -26,9 +26,23 @@ function App() {
   const { createFeedback } = useFeedbackMutations();
   const { createButtonCall, closeButtonCallFromPanel } = useButtonCallMutations();
   const queue = useGetQueue(Number(location), tableName ?? "");
+
   if (!location || !tableName) {
     return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
   }
+
+  const getLocationName = (locationId: number): string => {
+    switch (locationId) {
+      case LocationEnum.BAHCELI:
+        return "Bahçeli";
+      case LocationEnum.NEORAMA:
+        return "Neorama";
+      default:
+        return "";
+    }
+  };
+
+  const locationName = getLocationName(Number(location));
 
   const handleGameMasterCall = () => {
     setActiveRequest("gamemaster");
@@ -76,6 +90,11 @@ function App() {
     setActiveRequest(null);
   };
 
+  const handleMenuClick = () => {
+    const menuUrl = `https://menu.davinciboardgame.com/${location}`; //Burayı ortam değişkeni olarak da tanımlayabiliriz??
+    window.open(menuUrl, '_blank');
+  };
+
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
     createFeedback({
       location: Number(location),
@@ -118,7 +137,7 @@ function App() {
             </h1>
           </div>
           <p className="text-base md:text-xl font-merriweather text-dark-brown">
-            {t("header.welcome", { tableName })}
+            {t("header.welcome", { locationName, tableName })}
           </p>
         </div>
 
@@ -126,7 +145,7 @@ function App() {
           key={`${
             queue?.[ButtonCallTypeEnum.GAMEMASTERCALL]?.waitingCount ?? ""
           }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl w-full"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
         >
           <GenericCard
             icon={Swords}
@@ -208,21 +227,39 @@ function App() {
                   : t("service.button")}
               </Button>
             )}
-          </GenericCard>
+            </GenericCard>
+          </div>
 
-          <GenericCard
-            icon={MessageSquare}
-            iconColor="text-dark-brown"
-            title={t("feedback.title")}
-            description={t("feedback.description")}
-            mobileTitle={t("feedback.button")}
-            onMobileClick={() => setShowFeedbackForm(true)}
-            flipMobileIcon={true}
-          >
+          <div className="col-span-1 md:col-span-1">
+            <GenericCard
+              icon={UtensilsCrossed}
+              iconColor="text-dark-brown"
+              title={t("menu.title")}
+              description={t("menu.description")}
+              mobileTitle={t("menu.button")}
+              onMobileClick={handleMenuClick}
+            >
+              <Button onClick={handleMenuClick} variant="primary">
+                {t("menu.button")}
+              </Button>
+            </GenericCard>
+          </div>
+
+          <div className="col-span-2 md:col-span-1">
+            <GenericCard
+              icon={MessageSquare}
+              iconColor="text-dark-brown"
+              title={t("feedback.title")}
+              description={t("feedback.description")}
+              mobileTitle={t("feedback.button")}
+              onMobileClick={() => setShowFeedbackForm(true)}
+              flipMobileIcon={true}
+            >
             <Button onClick={() => setShowFeedbackForm(true)} variant="primary">
               {t("feedback.button")}
             </Button>
-          </GenericCard>
+            </GenericCard>
+          </div>
         </div>
       </div>
 

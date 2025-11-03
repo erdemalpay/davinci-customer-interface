@@ -3,6 +3,11 @@ export enum ButtonCallTypeEnum {
   GAMEMASTERCALL = "GAMEMASTERCALL",
   ORDERCALL = "ORDERCALL",
 }
+
+export enum LocationEnum {
+  BAHCELI = 1,
+  NEORAMA = 2,
+}
 export type Feedback = {
   _id: number;
   location: number;
