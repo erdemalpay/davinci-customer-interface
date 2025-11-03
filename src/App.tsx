@@ -10,9 +10,10 @@ import { useWebSocket } from "./hooks/useWebSocket";
 import { ButtonCallTypeEnum, LocationEnum } from "./types";
 import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
+import { getOrdinal } from "./utils/ordinal";
 
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   useWebSocket();
   const { location, tableName } = useParams<{
     location: string;
@@ -108,8 +109,8 @@ function App() {
     }, 2000);
   };
 
-  const gmQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
-  const svcQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
+  const gameMasterQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
+  const serviceQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
 
   return (
     <div className="min-h-screen bg-cream-bg relative overflow-hidden flex flex-col">
@@ -146,30 +147,32 @@ function App() {
           }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
         >
-          <div className="col-span-2 md:col-span-1">
-            <GenericCard
-              icon={Swords}
-              iconColor="text-dark-brown"
-              title={t("gamemaster.title")}
-              description={t("gamemaster.description")}
-              mobileTitle={t("gamemaster.button")}
-              mobileLoadingTitle={t("gamemaster.calling")}
-              isLoading={activeRequest === "gamemaster"}
-              showWalkingIcon={true}
-              onMobileClick={handleGameMasterCall}
-              showCancelButton={gmQueue?.isQueued || false}
-              onCancelClick={() => handleCancelRequest("gamemaster")}
-              cancelButtonText={t("cancel")}
-            >
-            {gmQueue?.isQueued && gmQueue.position === 1 ? (
+          <GenericCard
+            icon={Swords}
+            iconColor="text-dark-brown"
+            title={t("gamemaster.title")}
+            description={t("gamemaster.description")}
+            mobileTitle={t("gamemaster.button")}
+            mobileLoadingTitle={t("gamemaster.calling")}
+            isLoading={activeRequest === "gamemaster"}
+            showWalkingIcon={true}
+            onMobileClick={handleGameMasterCall}
+            showCancelButton={gmQueue?.isQueued || false}
+            onCancelClick={() => handleCancelRequest("gamemaster")}
+            cancelButtonText={t("cancel")}
+          >
+            {gameMasterQueue?.isQueued && gameMasterQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
-            ) : gmQueue?.waitingCount && gmQueue.waitingCount > 0 ? (
+            ) : gameMasterQueue?.waitingCount && gameMasterQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
-                {t("queue.waitingCount", {
-                  count: gmQueue.waitingCount,
-                })}
+                {t("queue.waitingCount").replace(
+                  "{{count}}",
+                  i18n.language === "en"
+                    ? getOrdinal(gameMasterQueue.waitingCount + 1)
+                    : `${gameMasterQueue.waitingCount + 1}.`
+                )}
               </div>
             ) : (
               <Button
@@ -183,33 +186,34 @@ function App() {
                   : t("gamemaster.button")}
               </Button>
             )}
-            </GenericCard>
-          </div>
+          </GenericCard>
 
-          <div className="col-span-1 md:col-span-1">
-            <GenericCard
-              icon={Coffee}
-              iconColor="text-dark-brown"
-              title={t("service.title")}
-              description={t("service.description")}
-              mobileTitle={t("service.button")}
-              mobileLoadingTitle={t("service.calling")}
-              isLoading={activeRequest === "service"}
-              showWalkingIcon={true}
-              onMobileClick={handleServiceCall}
-              showCancelButton={svcQueue?.isQueued || false}
-              onCancelClick={() => handleCancelRequest("service")}
-              cancelButtonText={t("cancel")}
-            >
-            {svcQueue?.isQueued && svcQueue.position === 1 ? (
+          <GenericCard
+            icon={Coffee}
+            iconColor="text-dark-brown"
+            title={t("service.title")}
+            description={t("service.description")}
+            mobileTitle={t("service.button")}
+            mobileLoadingTitle={t("service.calling")}
+            isLoading={activeRequest === "service"}
+            showWalkingIcon={true}
+            onMobileClick={handleServiceCall}
+            showCancelButton={svcQueue?.isQueued || false}
+            onCancelClick={() => handleCancelRequest("service")}
+            cancelButtonText={t("cancel")}
+          >
+            {serviceQueue?.isQueued && serviceQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
-            ) : svcQueue?.waitingCount && svcQueue.waitingCount > 0 ? (
+            ) : serviceQueue?.waitingCount && serviceQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
-                {t("queue.waitingCount", {
-                  count: svcQueue.waitingCount,
-                })}
+                {t("queue.waitingCount").replace(
+                  "{{count}}",
+                  i18n.language === "en"
+                    ? getOrdinal(serviceQueue.waitingCount + 1)
+                    : `${serviceQueue.waitingCount + 1}.`
+                )}
               </div>
             ) : (
               <Button
