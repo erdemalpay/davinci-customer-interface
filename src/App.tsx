@@ -157,7 +157,7 @@ function App() {
             isLoading={activeRequest === "gamemaster"}
             showWalkingIcon={true}
             onMobileClick={handleGameMasterCall}
-            showCancelButton={gmQueue?.isQueued || false}
+            showCancelButton={gameMasterQueue?.isQueued || false}
             onCancelClick={() => handleCancelRequest("gamemaster")}
             cancelButtonText={t("cancel")}
           >
@@ -198,7 +198,7 @@ function App() {
             isLoading={activeRequest === "service"}
             showWalkingIcon={true}
             onMobileClick={handleServiceCall}
-            showCancelButton={svcQueue?.isQueued || false}
+            showCancelButton={serviceQueue?.isQueued || false}
             onCancelClick={() => handleCancelRequest("service")}
             cancelButtonText={t("cancel")}
           >
@@ -227,8 +227,7 @@ function App() {
                   : t("service.button")}
               </Button>
             )}
-            </GenericCard>
-          </div>
+          </GenericCard>
 
           <div className="col-span-1 md:col-span-1">
             <GenericCard
