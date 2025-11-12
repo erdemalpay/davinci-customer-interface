@@ -145,7 +145,7 @@ function App() {
           key={`${
             queue?.[ButtonCallTypeEnum.GAMEMASTERCALL]?.waitingCount ?? ""
           }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
         >
           <GenericCard
             icon={Swords}
@@ -157,7 +157,7 @@ function App() {
             isLoading={activeRequest === "gamemaster"}
             showWalkingIcon={true}
             onMobileClick={handleGameMasterCall}
-            showCancelButton={gmQueue?.isQueued || false}
+            showCancelButton={gameMasterQueue?.isQueued || false}
             onCancelClick={() => handleCancelRequest("gamemaster")}
             cancelButtonText={t("cancel")}
           >
@@ -198,7 +198,7 @@ function App() {
             isLoading={activeRequest === "service"}
             showWalkingIcon={true}
             onMobileClick={handleServiceCall}
-            showCancelButton={svcQueue?.isQueued || false}
+            showCancelButton={serviceQueue?.isQueued || false}
             onCancelClick={() => handleCancelRequest("service")}
             cancelButtonText={t("cancel")}
           >
@@ -227,8 +227,7 @@ function App() {
                   : t("service.button")}
               </Button>
             )}
-            </GenericCard>
-          </div>
+          </GenericCard>
 
           <div className="col-span-1 md:col-span-1">
             <GenericCard
@@ -245,7 +244,7 @@ function App() {
             </GenericCard>
           </div>
 
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-1 md:col-span-1">
             <GenericCard
               icon={MessageSquare}
               iconColor="text-dark-brown"
