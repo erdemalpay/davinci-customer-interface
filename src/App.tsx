@@ -145,7 +145,7 @@ function App() {
           key={`${
             queue?.[ButtonCallTypeEnum.GAMEMASTERCALL]?.waitingCount ?? ""
           }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
         >
           <GenericCard
             icon={Swords}
@@ -244,7 +244,7 @@ function App() {
             </GenericCard>
           </div>
 
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-1 md:col-span-1">
             <GenericCard
               icon={MessageSquare}
               iconColor="text-dark-brown"
