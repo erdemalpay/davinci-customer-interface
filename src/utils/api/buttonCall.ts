@@ -22,7 +22,7 @@ export function useButtonCallMutations() {
 
   const closeButtonCallFromPanel = (payload: CloseButtonCallInput) => {
     return post<CloseButtonCallInput, ButtonCall>({
-      path: `${baseUrl}/close-from-panel`,
+      path: `${baseUrl}/close-from-customer`,
       payload,
     });
   };
