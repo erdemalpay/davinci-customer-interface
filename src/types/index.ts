@@ -4,6 +4,11 @@ export enum ButtonCallTypeEnum {
   ORDERCALL = "ORDERCALL",
 }
 
+export enum ButtonCallType {
+  ACTIVE = "active",
+  ALL = "all",
+}
+
 export enum LocationEnum {
   BAHCELI = 1,
   NEORAMA = 2,
@@ -42,4 +47,17 @@ export interface CloseButtonCallInput {
   location: number;
   hour: string;
   type: ButtonCallTypeEnum;
+}
+
+export interface FormElementsState {
+  location: number | string;
+  cancelledBy: string[];
+  tableName: string;
+  date: string;
+  before: string;
+  after: string;
+  type: string[];
+  sort: string;
+  asc: boolean | undefined;
+  search: string;
 }
