@@ -23,7 +23,7 @@ export default function ActiveButtonCallsPage() {
       }
       return acc;
     },
-    { active: [] }
+    { active: [] },
   ).active;
 
   // Group calls by type
@@ -31,10 +31,10 @@ export default function ActiveButtonCallsPage() {
     gameMasterAndTable: activeButtonCalls.filter(
       (call: ButtonCall) =>
         call.type === ButtonCallTypeEnum.GAMEMASTERCALL ||
-        call.type === ButtonCallTypeEnum.TABLECALL
+        call.type === ButtonCallTypeEnum.TABLECALL,
     ),
     order: activeButtonCalls.filter(
-      (call: ButtonCall) => call.type === ButtonCallTypeEnum.ORDERCALL
+      (call: ButtonCall) => call.type === ButtonCallTypeEnum.ORDERCALL,
     ),
   };
 
@@ -74,9 +74,9 @@ export default function ActiveButtonCallsPage() {
         <div className="flex flex-wrap gap-6">
           {calls.map((buttonCall: ButtonCall) => (
             <div
-              key={buttonCall.tableName}
+              key={buttonCall._id}
               className={`${getBackgroundColor(
-                buttonCall.type
+                buttonCall.type,
               )} relative group text-white px-16 py-14 rounded-3xl shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer min-h-[180px] min-w-[200px]`}
               title={buttonCall.tableName}
             >
@@ -106,7 +106,7 @@ export default function ActiveButtonCallsPage() {
           {groupedCalls.gameMasterAndTable.length > 0 &&
             renderCallGroup(
               groupedCalls.gameMasterAndTable,
-              ButtonCallTypeEnum.GAMEMASTERCALL
+              ButtonCallTypeEnum.GAMEMASTERCALL,
             )}
 
           {groupedCalls.order.length > 0 &&
