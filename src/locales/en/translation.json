@@ -1,7 +1,7 @@
 {
   "header": {
     "title": "Da Vinci Board Game Cafe",
-    "welcome": "Table {{tableName}} - Welcome!"
+    "welcome": "{{locationName}} - Table {{tableName}} - Welcome!"
   },
   "gamemaster": {
     "title": "Game Help",
@@ -14,6 +14,11 @@
     "description": "Call service staff to place an order",
     "button": "Place an Order",
     "calling": "Calling..."
+  },
+  "menu": {
+    "title": "Menu",
+    "description": "View our menu",
+    "button": "View Menu"
   },
   "feedback": {
     "title": "Feedback",
@@ -39,9 +44,9 @@
   "hello": "Hello",
   "goodbye": "Goodbye",
   "queue": {
-    "waitingCount_one": "{{count}} table ahead in the queue",
-    "waitingCount_other": "{{count}} tables ahead in the queue",
+    "waitingCount": "You are in {{count}} place",
     "noWait": "No wait",
-    "yourTurn": "It's your turn!"
-  }
+    "yourTurn": "You're next!"
+  },
+  "cancel": "Cancel"
 }

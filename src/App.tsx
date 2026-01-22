@@ -1,4 +1,4 @@
-import { Coffee, MessageSquare, Swords } from "lucide-react";
+import { Coffee, MessageSquare, Swords, UtensilsCrossed } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -7,27 +7,60 @@ import { FeedbackModal } from "./components/FeedbackModal";
 import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { useWebSocket } from "./hooks/useWebSocket";
-import { ButtonCallTypeEnum } from "./types";
+import { ButtonCallTypeEnum, LocationEnum } from "./types";
 import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
+import { getOrdinal } from "./utils/ordinal";
+import { decodeTableUrl } from "./utils/qrEncoding";
 
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   useWebSocket();
-  const { location, tableName } = useParams<{
-    location: string;
-    tableName: string;
+  const { encodedTable } = useParams<{
+    encodedTable: string;
   }>();
+
+  // Decode the encoded table URL
+  const decodedData = encodedTable ? decodeTableUrl(encodedTable) : null;
 
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const { createFeedback } = useFeedbackMutations();
-  const { createButtonCall } = useButtonCallMutations();
-  const queue = useGetQueue(Number(location), tableName ?? "");
-  if (!location || !tableName) {
-    return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
+  const { createButtonCall, closeButtonCallFromPanel } = useButtonCallMutations();
+  const queue = useGetQueue(
+    decodedData?.location ?? 0,
+    decodedData?.tableName ?? ""
+  );
+
+  if (!encodedTable || !decodedData) {
+    return (
+      <div className="min-h-screen bg-cream-bg flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-germania text-dark-brown mb-4">404</h1>
+          <p className="text-xl font-merriweather text-dark-brown">
+            {t("errors.invalidParameters")}
+          </p>
+        </div>
+      </div>
+    );
   }
+
+  const location = decodedData.location;
+  const tableName = decodedData.tableName;
+
+  const getLocationName = (locationId: number): string => {
+    switch (locationId) {
+      case LocationEnum.BAHCELI:
+        return "Bahçeli";
+      case LocationEnum.NEORAMA:
+        return "Neorama";
+      default:
+        return "";
+    }
+  };
+
+  const locationName = getLocationName(Number(location));
 
   const handleGameMasterCall = () => {
     setActiveRequest("gamemaster");
@@ -59,6 +92,27 @@ function App() {
     setTimeout(() => setActiveRequest(null), 3000);
   };
 
+  const handleCancelRequest = (type: "gamemaster" | "service") => {
+    closeButtonCallFromPanel({
+      location: Number(location),
+      tableName: tableName,
+      hour: new Date().toLocaleTimeString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+      type: type === "gamemaster"
+        ? ButtonCallTypeEnum.GAMEMASTERCALL
+        : ButtonCallTypeEnum.ORDERCALL,
+    });
+    setActiveRequest(null);
+  };
+
+  const handleMenuClick = () => {
+    const menuUrl = `https://menu.davinciboardgame.com/${location}`; //Burayı ortam değişkeni olarak da tanımlayabiliriz??
+    window.open(menuUrl, '_blank');
+  };
+
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
     createFeedback({
       location: Number(location),
@@ -73,8 +127,8 @@ function App() {
     }, 2000);
   };
 
-  const gmQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
-  const svcQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
+  const gameMasterQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
+  const serviceQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
 
   return (
     <div className="min-h-screen bg-cream-bg relative overflow-hidden flex flex-col">
@@ -101,7 +155,7 @@ function App() {
             </h1>
           </div>
           <p className="text-base md:text-xl font-merriweather text-dark-brown">
-            {t("header.welcome", { tableName })}
+            {t("header.welcome", { locationName, tableName })}
           </p>
         </div>
 
@@ -109,7 +163,7 @@ function App() {
           key={`${
             queue?.[ButtonCallTypeEnum.GAMEMASTERCALL]?.waitingCount ?? ""
           }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl w-full"
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
         >
           <GenericCard
             icon={Swords}
@@ -121,16 +175,22 @@ function App() {
             isLoading={activeRequest === "gamemaster"}
             showWalkingIcon={true}
             onMobileClick={handleGameMasterCall}
+            showCancelButton={gameMasterQueue?.isQueued || false}
+            onCancelClick={() => handleCancelRequest("gamemaster")}
+            cancelButtonText={t("cancel")}
           >
-            {gmQueue?.isQueued && gmQueue.position === 1 ? (
+            {gameMasterQueue?.isQueued && gameMasterQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
-            ) : gmQueue?.waitingCount && gmQueue.waitingCount > 0 ? (
+            ) : gameMasterQueue?.waitingCount && gameMasterQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
-                {t("queue.waitingCount", {
-                  count: gmQueue.waitingCount,
-                })}
+                {t("queue.waitingCount").replace(
+                  "{{count}}",
+                  i18n.language === "en"
+                    ? getOrdinal(gameMasterQueue.waitingCount + 1)
+                    : `${gameMasterQueue.waitingCount + 1}.`
+                )}
               </div>
             ) : (
               <Button
@@ -156,16 +216,22 @@ function App() {
             isLoading={activeRequest === "service"}
             showWalkingIcon={true}
             onMobileClick={handleServiceCall}
+            showCancelButton={serviceQueue?.isQueued || false}
+            onCancelClick={() => handleCancelRequest("service")}
+            cancelButtonText={t("cancel")}
           >
-            {svcQueue?.isQueued && svcQueue.position === 1 ? (
+            {serviceQueue?.isQueued && serviceQueue.position === 1 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
-            ) : svcQueue?.waitingCount && svcQueue.waitingCount > 0 ? (
+            ) : serviceQueue?.waitingCount && serviceQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
-                {t("queue.waitingCount", {
-                  count: svcQueue.waitingCount,
-                })}
+                {t("queue.waitingCount").replace(
+                  "{{count}}",
+                  i18n.language === "en"
+                    ? getOrdinal(serviceQueue.waitingCount + 1)
+                    : `${serviceQueue.waitingCount + 1}.`
+                )}
               </div>
             ) : (
               <Button
@@ -181,19 +247,36 @@ function App() {
             )}
           </GenericCard>
 
-          <GenericCard
-            icon={MessageSquare}
-            iconColor="text-dark-brown"
-            title={t("feedback.title")}
-            description={t("feedback.description")}
-            mobileTitle={t("feedback.button")}
-            onMobileClick={() => setShowFeedbackForm(true)}
-            flipMobileIcon={true}
-          >
+          <div className="col-span-1 md:col-span-1">
+            <GenericCard
+              icon={UtensilsCrossed}
+              iconColor="text-dark-brown"
+              title={t("menu.title")}
+              description={t("menu.description")}
+              mobileTitle={t("menu.button")}
+              onMobileClick={handleMenuClick}
+            >
+              <Button onClick={handleMenuClick} variant="primary">
+                {t("menu.button")}
+              </Button>
+            </GenericCard>
+          </div>
+
+          <div className="col-span-1 md:col-span-1">
+            <GenericCard
+              icon={MessageSquare}
+              iconColor="text-dark-brown"
+              title={t("feedback.title")}
+              description={t("feedback.description")}
+              mobileTitle={t("feedback.button")}
+              onMobileClick={() => setShowFeedbackForm(true)}
+              flipMobileIcon={true}
+            >
             <Button onClick={() => setShowFeedbackForm(true)} variant="primary">
               {t("feedback.button")}
             </Button>
-          </GenericCard>
+            </GenericCard>
+          </div>
         </div>
       </div>
 

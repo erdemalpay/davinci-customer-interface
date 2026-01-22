@@ -1,6 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-//@ts-expect-error socket io gives type error
 import { Socket, io } from "socket.io-client";
 import { socketEventListeners } from "./socketConstant";
 
