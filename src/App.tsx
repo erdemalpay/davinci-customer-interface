@@ -11,25 +11,43 @@ import { ButtonCallTypeEnum, LocationEnum } from "./types";
 import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
 import { getOrdinal } from "./utils/ordinal";
+import { decodeTableUrl } from "./utils/qrEncoding";
 
 function App() {
   const { t, i18n } = useTranslation();
   useWebSocket();
-  const { location, tableName } = useParams<{
-    location: string;
-    tableName: string;
+  const { encodedTable } = useParams<{
+    encodedTable: string;
   }>();
+
+  // Decode the encoded table URL
+  const decodedData = encodedTable ? decodeTableUrl(encodedTable) : null;
 
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const { createFeedback } = useFeedbackMutations();
   const { createButtonCall, closeButtonCallFromPanel } = useButtonCallMutations();
-  const queue = useGetQueue(Number(location), tableName ?? "");
+  const queue = useGetQueue(
+    decodedData?.location ?? 0,
+    decodedData?.tableName ?? ""
+  );
 
-  if (!location || !tableName) {
-    return <div className="text-red-500">{t("errors.invalidParameters")}</div>;
+  if (!encodedTable || !decodedData) {
+    return (
+      <div className="min-h-screen bg-cream-bg flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-germania text-dark-brown mb-4">404</h1>
+          <p className="text-xl font-merriweather text-dark-brown">
+            {t("errors.invalidParameters")}
+          </p>
+        </div>
+      </div>
+    );
   }
+
+  const location = decodedData.location;
+  const tableName = decodedData.tableName;
 
   const getLocationName = (locationId: number): string => {
     switch (locationId) {

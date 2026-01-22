@@ -8,6 +8,7 @@ import { LocationProvider } from "./context/Location.context";
 import "./i18n/config";
 import "./index.css";
 import ActiveButtonCallsPage from "./pages/ActiveButtonCallsPage";
+import QRListPage from "./pages/QRListPage";
 
 const queryClient = new QueryClient();
 
@@ -19,10 +20,11 @@ createRoot(document.getElementById("root")!).render(
           <BrowserRouter>
             <Routes>
               <Route
-                path="/:location/active-calls"
+                path="/admin/active-calls/:location"
                 element={<ActiveButtonCallsPage />}
               />
-              <Route path="/:location/:tableName" element={<App />} />
+              <Route path="/admin/qr-list" element={<QRListPage />} />
+              <Route path="/:encodedTable" element={<App />} />
               <Route path="*" element={<App />} />
             </Routes>
           </BrowserRouter>
