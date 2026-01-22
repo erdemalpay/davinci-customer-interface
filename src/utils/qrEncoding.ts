@@ -67,8 +67,8 @@ export function decodeTableUrl(encoded: string): { location: number; tableName: 
 
 /**
  * Generates all encoded URLs for both locations
- * Location 1 (Bahçeli): 16 tables
- * Location 2 (Neorama): 28 tables
+ * Location 1 (Bahçeli): 17 tables (1-17)
+ * Location 2 (Neorama): 29 tables (1-14, 20-34)
  */
 export function generateAllEncodedUrls(baseUrl: string): Array<{
   locationId: number;
@@ -77,9 +77,18 @@ export function generateAllEncodedUrls(baseUrl: string): Array<{
   encodedUrl: string;
   fullUrl: string;
 }> {
+  // Bahçeli: 1-17 arası masalar
+  const bahceliTables = Array.from({ length: 17 }, (_, i) => (i + 1).toString());
+
+  // Neorama: 1-14 ve 20-34 arası masalar (15-19 yok)
+  const neoramaTables = [
+    ...Array.from({ length: 14 }, (_, i) => (i + 1).toString()),  // 1-14
+    ...Array.from({ length: 15 }, (_, i) => (i + 20).toString())  // 20-34
+  ];
+
   const locations = [
-    { id: 1, name: 'Bahçeli', tableCount: 16 },
-    { id: 2, name: 'Neorama', tableCount: 28 }
+    { id: 1, name: 'Bahçeli', tableNames: bahceliTables },
+    { id: 2, name: 'Neorama', tableNames: neoramaTables }
   ];
 
   const urls: Array<{
@@ -91,8 +100,7 @@ export function generateAllEncodedUrls(baseUrl: string): Array<{
   }> = [];
 
   locations.forEach(location => {
-    for (let i = 1; i <= location.tableCount; i++) {
-      const tableName = i.toString();
+    location.tableNames.forEach(tableName => {
       const encoded = encodeTableUrl(location.id, tableName);
       urls.push({
         locationId: location.id,
@@ -101,7 +109,7 @@ export function generateAllEncodedUrls(baseUrl: string): Array<{
         encodedUrl: `/${encoded}`,
         fullUrl: `${baseUrl}/${encoded}`
       });
-    }
+    });
   });
 
   return urls;

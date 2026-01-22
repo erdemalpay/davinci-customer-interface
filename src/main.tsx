@@ -9,6 +9,7 @@ import "./i18n/config";
 import "./index.css";
 import ActiveButtonCallsPage from "./pages/ActiveButtonCallsPage";
 import QRListPage from "./pages/QRListPage";
+import RedirectPage from "./pages/RedirectPage";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,12 @@ createRoot(document.getElementById("root")!).render(
                 element={<ActiveButtonCallsPage />}
               />
               <Route path="/admin/qr-list" element={<QRListPage />} />
+              {/* Old format redirect: /1/5 or /2/14 → encoded URL */}
+              <Route
+                path="/:location/:tableName"
+                element={<RedirectPage />}
+              />
+              {/* New format: encoded table URL */}
               <Route path="/:encodedTable" element={<App />} />
               <Route path="*" element={<App />} />
             </Routes>
