@@ -65,23 +65,67 @@ export default function ActiveButtonCallsPage() {
     }
   }
 
+  // Dinamik boyut hesaplama
+  const totalCalls = activeButtonCalls.length;
+  const getDynamicSizes = () => {
+    if (totalCalls <= 6) {
+      return {
+        cardText: "text-8xl",
+        cardPadding: "px-16 py-14",
+        cardSize: "min-h-[180px] min-w-[220px]",
+        iconSize: "text-7xl",
+        gap: "gap-6",
+        mbGroup: "mb-10",
+      };
+    } else if (totalCalls <= 12) {
+      return {
+        cardText: "text-7xl",
+        cardPadding: "px-14 py-12",
+        cardSize: "min-h-[160px] min-w-[190px]",
+        iconSize: "text-6xl",
+        gap: "gap-5",
+        mbGroup: "mb-9",
+      };
+    } else if (totalCalls <= 18) {
+      return {
+        cardText: "text-6xl",
+        cardPadding: "px-12 py-10",
+        cardSize: "min-h-[140px] min-w-[160px]",
+        iconSize: "text-5xl",
+        gap: "gap-4",
+        mbGroup: "mb-8",
+      };
+    } else {
+      return {
+        cardText: "text-5xl",
+        cardPadding: "px-10 py-8",
+        cardSize: "min-h-[120px] min-w-[140px]",
+        iconSize: "text-4xl",
+        gap: "gap-3",
+        mbGroup: "mb-7",
+      };
+    }
+  };
+
+  const sizes = getDynamicSizes();
+
   const renderCallGroup = (calls: ButtonCall[], type: ButtonCallTypeEnum) => {
     if (calls.length === 0) return null;
 
     return (
-      <div className="flex items-center gap-8 mb-8">
-        <div className="text-gray-700 flex-shrink-0 text-5xl">{getIcon(type)}</div>
+      <div className={`flex items-center gap-8 ${sizes.mbGroup}`}>
+        <div className={`text-gray-700 flex-shrink-0 ${sizes.iconSize}`}>{getIcon(type)}</div>
 
-        <div className="flex flex-wrap gap-4">
+        <div className={`flex flex-wrap ${sizes.gap}`}>
           {calls.map((buttonCall: ButtonCall) => (
             <div
               key={buttonCall._id}
               className={`${getBackgroundColor(
                 buttonCall.type,
-              )} relative group text-white px-12 py-10 rounded-3xl shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer min-h-[140px] min-w-[160px]`}
+              )} relative group text-white ${sizes.cardPadding} rounded-3xl shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer ${sizes.cardSize}`}
               title={buttonCall.tableName}
             >
-              <span className="text-6xl font-bold">{buttonCall.tableName}</span>
+              <span className={`${sizes.cardText} font-bold`}>{buttonCall.tableName}</span>
             </div>
           ))}
         </div>
