@@ -12,6 +12,7 @@ import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
 import { getOrdinal } from "./utils/ordinal";
 import { decodeTableUrl } from "./utils/qrEncoding";
+import logoUrl from "./assets/images/logo.png";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -136,7 +137,7 @@ function App() {
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{
-          backgroundImage: `url('/src/assets/images/logo.png')`,
+          backgroundImage: `url('${logoUrl}')`,
           backgroundRepeat: 'repeat',
           backgroundSize: '200px auto',
           filter: 'grayscale(1) brightness(0.5)',
