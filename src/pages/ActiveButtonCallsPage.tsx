@@ -42,13 +42,13 @@ export default function ActiveButtonCallsPage() {
   function getBackgroundColor(type: ButtonCallTypeEnum) {
     switch (type) {
       case ButtonCallTypeEnum.TABLECALL:
-        return "bg-green-500 hover:bg-green-600";
+        return "bg-green-500 ";
       case ButtonCallTypeEnum.GAMEMASTERCALL:
-        return "bg-blue-500 hover:bg-blue-600";
+        return "bg-blue-500 ";
       case ButtonCallTypeEnum.ORDERCALL:
-        return "bg-orange-500 hover:bg-orange-600";
+        return "bg-orange-500 ";
       default:
-        return "bg-green-500 hover:bg-green-600";
+        return "bg-green-500 ";
     }
   }
 
@@ -69,19 +69,19 @@ export default function ActiveButtonCallsPage() {
     if (calls.length === 0) return null;
 
     return (
-      <div className="flex items-center gap-10 mb-12">
-        <div className="text-gray-700 flex-shrink-0">{getIcon(type)}</div>
+      <div className="flex items-center gap-8 mb-8">
+        <div className="text-gray-700 flex-shrink-0 text-5xl">{getIcon(type)}</div>
 
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-4">
           {calls.map((buttonCall: ButtonCall) => (
             <div
               key={buttonCall._id}
               className={`${getBackgroundColor(
                 buttonCall.type,
-              )} relative group text-white px-16 py-14 rounded-3xl shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer min-h-[180px] min-w-[200px]`}
+              )} relative group text-white px-12 py-10 rounded-3xl shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer min-h-[140px] min-w-[160px]`}
               title={buttonCall.tableName}
             >
-              <span className="text-7xl font-bold">{buttonCall.tableName}</span>
+              <span className="text-6xl font-bold">{buttonCall.tableName}</span>
             </div>
           ))}
         </div>
@@ -111,7 +111,7 @@ export default function ActiveButtonCallsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream-bg relative overflow-hidden flex items-center justify-center p-12">
+    <div className="min-h-screen bg-cream-bg relative overflow-hidden flex items-center justify-center p-10">
       {/* Background pattern */}
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
@@ -123,7 +123,7 @@ export default function ActiveButtonCallsPage() {
         }}
       />
       <div className="max-w-full mx-auto relative z-10">
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-10">
           {groupedCalls.gameMasterAndTable.length > 0 &&
             renderCallGroup(
               groupedCalls.gameMasterAndTable,
