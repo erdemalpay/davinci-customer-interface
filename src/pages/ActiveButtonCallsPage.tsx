@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { ButtonCall, ButtonCallTypeEnum } from "../types";
 import { useGetActiveButtonCalls } from "../utils/api/buttonCall";
+import logoUrl from "../assets/images/logo.png";
 
 export default function ActiveButtonCallsPage() {
   useWebSocket();
@@ -90,18 +91,38 @@ export default function ActiveButtonCallsPage() {
 
   if (activeButtonCalls.length === 0) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <div className="text-center">
+      <div className="flex items-center justify-center h-screen bg-cream-bg relative overflow-hidden">
+        {/* Background pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.025] pointer-events-none"
+          style={{
+            backgroundImage: `url('${logoUrl}')`,
+            backgroundRepeat: 'repeat',
+            backgroundSize: '200px auto',
+            filter: 'grayscale(1) brightness(0.5)',
+          }}
+        />
+        <div className="text-center relative z-10">
           <HiBellAlert className="text-8xl text-gray-300 mx-auto mb-4" />
-          <p className="text-3xl text-gray-400 font-medium">No Active Calls</p>
+          <p className="text-3xl text-gray-400 font-medium">No Active Button Calls</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-12">
-      <div className="max-w-full mx-auto">
+    <div className="min-h-screen bg-cream-bg relative overflow-hidden flex items-center justify-center p-12">
+      {/* Background pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.025] pointer-events-none"
+        style={{
+          backgroundImage: `url('${logoUrl}')`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '200px auto',
+          filter: 'grayscale(1) brightness(0.5)',
+        }}
+      />
+      <div className="max-w-full mx-auto relative z-10">
         <div className="flex flex-col gap-12">
           {groupedCalls.gameMasterAndTable.length > 0 &&
             renderCallGroup(
