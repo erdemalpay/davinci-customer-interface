@@ -155,7 +155,7 @@ export default function ActiveButtonCallsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream-bg relative overflow-hidden flex items-center justify-center p-10">
+    <div className="min-h-screen bg-cream-bg relative overflow-hidden flex flex-col items-center p-10">
       {/* Background pattern */}
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
@@ -166,6 +166,14 @@ export default function ActiveButtonCallsPage() {
           filter: 'grayscale(1) brightness(0.5)',
         }}
       />
+      <div className="text-center mb-4 md:mb-12 mt-4 md:mt-0 relative z-10">
+        <div className="flex items-center justify-center gap-3 mb-2 md:mb-4">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-germania text-dark-brown">
+            Da Vinci Board Game Cafe
+          </h1>
+        </div>
+
+      </div>
       <div className="max-w-full mx-auto relative z-10">
         <div className="flex flex-col gap-10">
           {groupedCalls.gameMasterAndTable.length > 0 &&

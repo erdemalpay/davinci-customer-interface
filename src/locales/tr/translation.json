@@ -1,7 +1,8 @@
 {
   "header": {
     "title": "Da Vinci Board Game Cafe",
-    "welcome": "{{locationName}} - Masa {{tableName}} - Hoş Geldiniz!"
+    "welcome": "{{locationName}} - Masa {{tableName}} - Hoş Geldiniz!",
+    "welcomeLocation": "{{locationName}} - Hoş Geldiniz!"
   },
   "gamemaster": {
     "title": "Oyun Yardımı",
