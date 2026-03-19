@@ -1,5 +1,5 @@
-// Secret key for encoding/decoding - Keep this secret!
-const SECRET_SALT = "DaVinci_QR_2024_Secret_Key_!@#$%";
+// Secret key for encoding/decoding - loaded from environment variables
+const SECRET_SALT = import.meta.env.VITE_QR_SECRET_SALT as string;
 
 /**
  * Encodes location and table name into a URL-safe string
