@@ -6,7 +6,7 @@ import { useWebSocket } from "../hooks/useWebSocket";
 import { ButtonCall, ButtonCallTypeEnum } from "../types";
 import { useGetActiveButtonCalls } from "../utils/api/buttonCall";
 import logoUrl from "../assets/images/logo.png";
-//deneme
+
 export default function ActiveButtonCallsPage() {
   useWebSocket();
   const { location } = useParams<{ location: string }>();
