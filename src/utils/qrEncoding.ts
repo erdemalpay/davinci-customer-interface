@@ -1,5 +1,5 @@
-// Salt is loaded exclusively from environment variables (VITE_QR_SECRET_SALT).
-const SECRET_SALT = (import.meta.env.VITE_QR_SECRET_SALT as string | undefined)?.trim() ?? "";
+// Salt is loaded from environment variables, with a fallback for safety.
+const SECRET_SALT = (import.meta.env.VITE_QR_SECRET_SALT as string | undefined)?.trim() || "DaVinci_QR_2024_Secret_Key_!@#$%";
 
 // Legacy salts to keep old/broken production URLs working.
 const LEGACY_ACCEPTED_SALTS = new Set([
