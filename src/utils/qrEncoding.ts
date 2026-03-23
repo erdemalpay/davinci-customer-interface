@@ -1,5 +1,16 @@
-// Secret key for encoding/decoding - Keep this secret!
-const SECRET_SALT = "DaVinci_QR_2024_Secret_Key_!@#$%";
+// Primary salt used for new QR generation.
+const FALLBACK_SECRET_SALT = "DaVinci_QR_2024_Secret_Key_!@#$%";
+const ENV_SECRET_SALT = import.meta.env.VITE_QR_SECRET_SALT as string | undefined;
+const SECRET_SALT = ENV_SECRET_SALT && ENV_SECRET_SALT.trim()
+  ? ENV_SECRET_SALT.trim()
+  : FALLBACK_SECRET_SALT;
+
+// Legacy salts to keep old/broken production URLs working.
+const LEGACY_ACCEPTED_SALTS = new Set([
+  FALLBACK_SECRET_SALT,
+  SECRET_SALT,
+  "undefined",
+]);
 
 /**
  * Encodes location and table name into a URL-safe string
@@ -46,12 +57,18 @@ export function decodeTableUrl(encoded: string): { location: number; tableName: 
     // Split and verify
     const parts = decoded.split('|');
 
-    if (parts.length !== 3 || parts[2] !== SECRET_SALT) {
+    // Support both current format (with valid salt) and legacy broken URLs.
+    if (parts.length < 2 || parts.length > 3) {
       return null;
     }
 
     const location = parseInt(parts[0], 10);
     const tableName = parts[1];
+    const salt = parts[2];
+
+    if (parts.length === 3 && (!salt || !LEGACY_ACCEPTED_SALTS.has(salt))) {
+      return null;
+    }
 
     // Validate location and tableName
     if (isNaN(location) || !tableName) {
