@@ -1,15 +1,11 @@
-// Primary salt used for new QR generation.
-const FALLBACK_SECRET_SALT = "DaVinci_QR_2024_Secret_Key_!@#$%";
-const ENV_SECRET_SALT = import.meta.env.VITE_QR_SECRET_SALT as string | undefined;
-const SECRET_SALT = ENV_SECRET_SALT && ENV_SECRET_SALT.trim()
-  ? ENV_SECRET_SALT.trim()
-  : FALLBACK_SECRET_SALT;
+// Salt is loaded exclusively from environment variables (VITE_QR_SECRET_SALT).
+const SECRET_SALT = (import.meta.env.VITE_QR_SECRET_SALT as string | undefined)?.trim() ?? "";
 
 // Legacy salts to keep old/broken production URLs working.
 const LEGACY_ACCEPTED_SALTS = new Set([
-  FALLBACK_SECRET_SALT,
   SECRET_SALT,
-  "undefined",
+  "DaVinci_QR_2024_Secret_Key_!@#$%", // initial hardcoded salt
+  "undefined",                          // broken production URLs before env var was set
 ]);
 
 /**
