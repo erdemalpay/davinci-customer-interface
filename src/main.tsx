@@ -5,13 +5,21 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App";
 import { DateProvider } from "./context/Date.context";
 import { LocationProvider } from "./context/Location.context";
-import "./i18n/config";
+import i18n from "./i18n/config";
 import "./index.css";
 import ActiveButtonCallsPage from "./pages/ActiveButtonCallsPage";
 import QRListPage from "./pages/QRListPage";
 import RedirectPage from "./pages/RedirectPage";
 
 const queryClient = new QueryClient();
+
+const normalizeLang = (lang: string) => (lang.startsWith("tr") ? "tr" : "en");
+const syncDocumentLanguage = (lang: string) => {
+  document.documentElement.lang = normalizeLang(lang);
+};
+
+syncDocumentLanguage(i18n.resolvedLanguage || i18n.language || "tr");
+i18n.on("languageChanged", syncDocumentLanguage);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
