@@ -35,10 +35,23 @@ function App() {
 
   if (!encodedTable || !decodedData) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#F7F3ED" }}>
-        <div className="text-center">
-          <h1 className="text-4xl font-body font-bold text-davinci-black mb-4">404</h1>
-          <p className="text-xl font-body text-davinci-black/70">
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ backgroundColor: "#F7F3ED" }}>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none"
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.07,
+            backgroundImage:
+              "linear-gradient(45deg, #1F2937 25%, transparent 25%), linear-gradient(-45deg, #1F2937 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1F2937 75%), linear-gradient(-45deg, transparent 75%, #1F2937 75%)",
+            backgroundSize: "60px 60px",
+            backgroundPosition: "0 0, 0 30px, 30px -30px, -30px 0px",
+          }}
+        />
+        <div className="text-center relative z-10">
+<h1 className="text-7xl md:text-9xl font-body font-bold text-davinci-black mb-6">404</h1>
+          <p className="text-2xl md:text-4xl font-body text-davinci-black/70">
             {t("errors.invalidParameters")}
           </p>
         </div>
@@ -110,7 +123,7 @@ function App() {
 
   const handleMenuClick = () => {
     const menuUrl = `https://menu.davinciboardgame.com/${location}`;
-    window.open(menuUrl, '_blank');
+    window.location.href = menuUrl;
   };
 
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
@@ -158,11 +171,13 @@ function App() {
       >
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">
-            <img
-              src={logoUrl}
-              alt="Da Vinci Logo"
-              className="h-10 md:h-12 w-auto object-contain"
-            />
+            <a href="https://davinciboardgame.com">
+              <img
+                src={logoUrl}
+                alt="Da Vinci Logo"
+                className="h-10 md:h-12 w-auto object-contain"
+              />
+            </a>
             <div className="flex flex-col leading-tight">
               <span className="font-display text-white text-lg md:text-xl">
                 Da Vinci
@@ -207,11 +222,11 @@ function App() {
             cancelButtonText={t("cancel")}
           >
             {gameMasterQueue?.isQueued && gameMasterQueue.position === 1 ? (
-              <div className="mb-2 text-base font-body font-semibold text-davinci-red animate-gentle-bounce">
+              <div className="mb-2 text-base font-body font-semibold text-white md:text-davinci-red animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
             ) : gameMasterQueue?.waitingCount && gameMasterQueue.waitingCount > 0 ? (
-              <div className="mb-2 text-base font-body text-davinci-black/70 animate-gentle-bounce">
+              <div className="mb-2 text-base font-body font-semibold text-white/80 md:text-davinci-black-deep animate-gentle-bounce">
                 {t("queue.waitingCount").replace(
                   "{{count}}",
                   i18n.language === "en"
@@ -247,11 +262,11 @@ function App() {
             cancelButtonText={t("cancel")}
           >
             {serviceQueue?.isQueued && serviceQueue.position === 1 ? (
-              <div className="mb-2 text-base font-body font-semibold text-davinci-red animate-gentle-bounce">
+              <div className="mb-2 text-base font-body font-semibold text-white md:text-davinci-red animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
             ) : serviceQueue?.waitingCount && serviceQueue.waitingCount > 0 ? (
-              <div className="mb-2 text-base font-body text-davinci-black/70 animate-gentle-bounce">
+              <div className="mb-2 text-base font-body font-semibold text-white/80 md:text-davinci-black-deep animate-gentle-bounce">
                 {t("queue.waitingCount").replace(
                   "{{count}}",
                   i18n.language === "en"

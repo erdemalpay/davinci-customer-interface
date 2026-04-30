@@ -19,6 +19,7 @@ export function FeedbackModal({
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
+  const [hoverRating, setHoverRating] = useState(0);
 
   if (!isOpen) return null;
 
@@ -46,13 +47,16 @@ export function FeedbackModal({
   };
 
   const renderStars = () => {
+    const activeRating = hoverRating || rating;
     return [...Array(5)].map((_, index) => (
       <button
         key={index}
         onClick={() => setRating(index + 1)}
-        className={`text-2xl transition-colors duration-200 ${
-          index < rating ? "text-yellow-400" : "text-davinci-gray-300"
-        } hover:text-yellow-400`}
+        onMouseEnter={() => setHoverRating(index + 1)}
+        onMouseLeave={() => setHoverRating(0)}
+        className={`text-2xl transition-colors duration-150 ${
+          index < activeRating ? "text-yellow-400" : "text-davinci-gray-600"
+        }`}
       >
         ★
       </button>
@@ -108,9 +112,9 @@ export function FeedbackModal({
               onClick={handleClose}
               className="flex-1 font-body font-semibold py-3 px-4 rounded-full transition-all duration-200"
               style={{
-                background: "var(--gray-200, #EDF0F4)",
-                color: "#1F2937",
-                border: "1px solid rgba(31, 41, 55, 0.15)",
+                background: "#A80000",
+                color: "#fff",
+                boxShadow: "0 4px 20px rgba(168,0,0,0.25)",
               }}
             >
               {t("feedback.cancel")}
@@ -119,10 +123,10 @@ export function FeedbackModal({
               onClick={handleSubmit}
               className="flex-1 font-body font-semibold py-3 px-4 rounded-full transition-all duration-200"
               style={{
-                background: isFormValid ? "var(--red, #A80000)" : "var(--gray-300, #DDE3EB)",
+                background: isFormValid ? "#1F2937" : "var(--gray-300, #DDE3EB)",
                 color: isFormValid ? "#fff" : "#9AA5B4",
                 cursor: isFormValid ? "pointer" : "not-allowed",
-                boxShadow: isFormValid ? "0 4px 20px rgba(168,0,0,0.25)" : "none",
+                boxShadow: isFormValid ? "0 4px 20px rgba(31,41,55,0.25)" : "none",
               }}
             >
               {t("feedback.submit")}

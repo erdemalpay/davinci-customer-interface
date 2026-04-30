@@ -38,12 +38,15 @@ export function GenericCard({
 
   return (
     <div
-      className={`relative backdrop-blur-sm rounded-xl p-6 md:p-8 flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden md:cursor-default ${shouldDisableMobileClick ? 'cursor-default' : 'cursor-pointer'} transition-all duration-150 ${shouldDisableMobileClick ? '' : 'active:scale-90 active:shadow-md'} md:active:scale-100 md:active:shadow-lg`}
-      style={{
-        backgroundColor: "rgba(255, 255, 255, 0.7)",
-        border: "1px solid rgba(255, 255, 255, 0.6)",
-        boxShadow: "0 4px 24px rgba(31, 41, 55, 0.10), 0 1px 4px rgba(31, 41, 55, 0.06)",
-      }}
+      className={`
+        relative rounded-xl p-6 md:p-8 flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden
+        md:cursor-default md:backdrop-blur-sm
+        bg-[#1F2937] md:bg-white/70
+        border border-white/10 md:border-white/60
+        shadow-[0_4px_24px_rgba(0,0,0,0.20)] md:shadow-[0_4px_24px_rgba(31,41,55,0.10)]
+        transition-all duration-150
+        ${shouldDisableMobileClick ? 'cursor-default' : 'cursor-pointer active:scale-90 active:shadow-md md:active:scale-100 md:active:shadow-lg'}
+      `}
       onClick={onMobileClick && !shouldDisableMobileClick ? (e) => {
         const target = e.target as HTMLElement;
         if (window.innerWidth < 768 && !target.closest('button')) {
@@ -53,8 +56,8 @@ export function GenericCard({
     >
       {/* Decorative background icon - only visible on mobile */}
       {Icon && (
-        <div className={`absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-12 opacity-[0.06] pointer-events-none md:hidden ${flipMobileIcon ? 'scale-x-[-1]' : ''}`}>
-          <Icon className="h-40 w-40 text-davinci-black" />
+        <div className={`absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-12 opacity-10 pointer-events-none md:hidden ${flipMobileIcon ? 'scale-x-[-1]' : ''}`}>
+          <Icon className="h-40 w-40 text-white" />
         </div>
       )}
 
@@ -62,7 +65,7 @@ export function GenericCard({
         {/* Icon - only visible on desktop */}
         {Icon && (
           <div className="hidden md:flex mx-auto mb-4 md:mb-6 items-center justify-center">
-            <Icon className="w-6 h-6 md:w-10 md:h-10 text-davinci-red" />
+            <Icon className="w-6 h-6 md:w-10 md:h-10 text-davinci-black-deep" />
           </div>
         )}
 
@@ -75,7 +78,7 @@ export function GenericCard({
 
         {/* Mobile title with walking icon */}
         {(title || mobileTitle) && (
-          <h3 className="block md:hidden text-xl font-body font-bold text-davinci-black flex items-center justify-center gap-2 mb-3">
+          <h3 className="block md:hidden text-xl font-body font-bold text-white flex items-center justify-center gap-2 mb-3">
             {isLoading && showWalkingIcon && (
               <WalkingIcon className="w-6 h-6" />
             )}
@@ -84,7 +87,7 @@ export function GenericCard({
         )}
 
         {description && (
-          <p className="text-sm text-davinci-gray-600 font-body mb-4 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
+          <p className="text-sm text-white/70 md:text-davinci-gray-600 font-body mb-4 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
             {description}
           </p>
         )}
@@ -101,7 +104,7 @@ export function GenericCard({
               e.stopPropagation();
               onCancelClick();
             }}
-            className="mt-3 px-4 py-2 text-base font-body bg-davinci-gray-200 hover:bg-davinci-gray-300 text-davinci-black rounded-full transition-all duration-200 active:scale-95"
+            className="mt-3 px-4 py-2 text-base font-body rounded-full transition-all duration-200 active:scale-95 bg-davinci-red hover:bg-davinci-red-dark text-white md:bg-davinci-black-deep md:hover:bg-davinci-black"
           >
             {cancelButtonText}
           </button>

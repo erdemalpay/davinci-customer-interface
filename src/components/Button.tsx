@@ -22,7 +22,7 @@ export function Button({
   showWalkingIcon = false,
 }: ButtonProps): JSX.Element {
   const variantBase = {
-    primary: { background: "var(--red, #A80000)", color: "#fff", boxShadow: "0 4px 20px rgba(168,0,0,0.25)" },
+    primary: { background: "#1F2937", color: "#fff", boxShadow: "0 4px 20px rgba(31,41,55,0.25)" },
     secondary: { background: "#4A5568", color: "#fff", boxShadow: "none" },
     success: { background: "#16a34a", color: "#fff", boxShadow: "none" },
   };
