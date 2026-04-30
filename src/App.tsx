@@ -21,7 +21,6 @@ function App() {
     encodedTable: string;
   }>();
 
-  // Decode the encoded table URL
   const decodedData = encodedTable ? decodeTableUrl(encodedTable) : null;
 
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
@@ -36,10 +35,10 @@ function App() {
 
   if (!encodedTable || !decodedData) {
     return (
-      <div className="min-h-screen bg-cream-bg flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#F7F3ED" }}>
         <div className="text-center">
-          <h1 className="text-4xl font-germania text-dark-brown mb-4">404</h1>
-          <p className="text-xl font-merriweather text-dark-brown">
+          <h1 className="text-4xl font-body font-bold text-davinci-black mb-4">404</h1>
+          <p className="text-xl font-body text-davinci-black/70">
             {t("errors.invalidParameters")}
           </p>
         </div>
@@ -110,7 +109,7 @@ function App() {
   };
 
   const handleMenuClick = () => {
-    const menuUrl = `https://menu.davinciboardgame.com/${location}`; //Burayı ortam değişkeni olarak da tanımlayabiliriz??
+    const menuUrl = `https://menu.davinciboardgame.com/${location}`;
     window.open(menuUrl, '_blank');
   };
 
@@ -132,30 +131,58 @@ function App() {
   const serviceQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
 
   return (
-    <div className="min-h-screen bg-cream-bg relative overflow-hidden flex flex-col">
-      {/* Background pattern */}
+    <div className="min-h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: "#F7F3ED" }}>
+      {/* Checkered background pattern */}
       <div
-        className="absolute inset-0 opacity-[0.025] pointer-events-none"
+        aria-hidden="true"
+        className="pointer-events-none"
         style={{
-          backgroundImage: `url('${logoUrl}')`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '200px auto',
-          filter: 'grayscale(1) brightness(0.5)',
+          position: "absolute",
+          inset: 0,
+          opacity: 0.07,
+          backgroundImage:
+            "linear-gradient(45deg, #1F2937 25%, transparent 25%), linear-gradient(-45deg, #1F2937 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1F2937 75%), linear-gradient(-45deg, transparent 75%, #1F2937 75%)",
+          backgroundSize: "60px 60px",
+          backgroundPosition: "0 0, 0 30px, 30px -30px, -30px 0px",
         }}
       />
 
-      <header className="relative z-50 flex justify-end items-center pt-4 pb-2 md:py-4 px-6">
-        <LanguageToggle />
+      {/* Header */}
+      <header
+        className="relative z-50 w-full h-16 flex items-center px-4 lg:px-8"
+        style={{
+          background: "linear-gradient(180deg, #111827 0%, #1F2937 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          boxShadow: "0 2px 20px rgba(0,0,0,0.25)",
+        }}
+      >
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-3">
+            <img
+              src={logoUrl}
+              alt="Da Vinci Logo"
+              className="h-10 md:h-12 w-auto object-contain"
+            />
+            <div className="flex flex-col leading-tight">
+              <span className="font-display text-white text-lg md:text-xl">
+                Da Vinci
+              </span>
+              <span className="font-body text-white/75 text-xs md:text-sm tracking-[0.08em] uppercase">
+                Board Game Cafe
+              </span>
+            </div>
+          </div>
+          <LanguageToggle />
+        </div>
       </header>
 
+      {/* Main content */}
       <div className="relative z-10 flex flex-col items-center flex-1 p-3 md:p-6 md:justify-center">
         <div className="text-center mb-4 md:mb-12 mt-4 md:mt-0">
-          <div className="flex items-center justify-center gap-3 mb-2 md:mb-4">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-germania text-dark-brown">
-              {t("header.title")}
-            </h1>
-          </div>
-          <p className="text-base md:text-xl font-merriweather text-dark-brown">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-body font-bold text-davinci-black mb-2 md:mb-4">
+            {t("header.title")}
+          </h1>
+          <p className="text-base md:text-xl font-body text-davinci-black/70">
             {t("header.welcome", { locationName, tableName })}
           </p>
         </div>
@@ -164,11 +191,10 @@ function App() {
           key={`${
             queue?.[ButtonCallTypeEnum.GAMEMASTERCALL]?.waitingCount ?? ""
           }-${queue?.[ButtonCallTypeEnum.ORDERCALL]?.waitingCount ?? ""}`}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl w-full"
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl w-full"
         >
           <GenericCard
             icon={Swords}
-            iconColor="text-dark-brown"
             title={t("gamemaster.title")}
             description={t("gamemaster.description")}
             mobileTitle={t("gamemaster.button")}
@@ -181,11 +207,11 @@ function App() {
             cancelButtonText={t("cancel")}
           >
             {gameMasterQueue?.isQueued && gameMasterQueue.position === 1 ? (
-              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
+              <div className="mb-2 text-base font-body font-semibold text-davinci-red animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
             ) : gameMasterQueue?.waitingCount && gameMasterQueue.waitingCount > 0 ? (
-              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
+              <div className="mb-2 text-base font-body text-davinci-black/70 animate-gentle-bounce">
                 {t("queue.waitingCount").replace(
                   "{{count}}",
                   i18n.language === "en"
@@ -209,7 +235,6 @@ function App() {
 
           <GenericCard
             icon={Coffee}
-            iconColor="text-dark-brown"
             title={t("service.title")}
             description={t("service.description")}
             mobileTitle={t("service.button")}
@@ -222,11 +247,11 @@ function App() {
             cancelButtonText={t("cancel")}
           >
             {serviceQueue?.isQueued && serviceQueue.position === 1 ? (
-              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown animate-gentle-bounce">
+              <div className="mb-2 text-base font-body font-semibold text-davinci-red animate-gentle-bounce">
                 {t("queue.yourTurn")}
               </div>
             ) : serviceQueue?.waitingCount && serviceQueue.waitingCount > 0 ? (
-              <div className="mb-2 text-base md:text-base font-merriweather text-light-brown/90 animate-gentle-bounce">
+              <div className="mb-2 text-base font-body text-davinci-black/70 animate-gentle-bounce">
                 {t("queue.waitingCount").replace(
                   "{{count}}",
                   i18n.language === "en"
@@ -251,7 +276,6 @@ function App() {
           <div className="col-span-1 md:col-span-1">
             <GenericCard
               icon={UtensilsCrossed}
-              iconColor="text-dark-brown"
               title={t("menu.title")}
               description={t("menu.description")}
               mobileTitle={t("menu.button")}
@@ -266,16 +290,15 @@ function App() {
           <div className="col-span-1 md:col-span-1">
             <GenericCard
               icon={MessageSquare}
-              iconColor="text-dark-brown"
               title={t("feedback.title")}
               description={t("feedback.description")}
               mobileTitle={t("feedback.button")}
               onMobileClick={() => setShowFeedbackForm(true)}
               flipMobileIcon={true}
             >
-            <Button onClick={() => setShowFeedbackForm(true)} variant="primary">
-              {t("feedback.button")}
-            </Button>
+              <Button onClick={() => setShowFeedbackForm(true)} variant="primary">
+                {t("feedback.button")}
+              </Button>
             </GenericCard>
           </div>
         </div>

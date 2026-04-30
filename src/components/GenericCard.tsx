@@ -38,9 +38,13 @@ export function GenericCard({
 
   return (
     <div
-      className={`relative bg-dark-brown backdrop-blur-sm rounded-xl p-6 md:p-8 border border-dark-brown/50 shadow-lg flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden md:cursor-default ${shouldDisableMobileClick ? 'cursor-default' : 'cursor-pointer'} transition-all duration-150 ${shouldDisableMobileClick ? '' : 'active:scale-90 active:shadow-md'} md:active:scale-100 md:active:shadow-lg`}
+      className={`relative backdrop-blur-sm rounded-xl p-6 md:p-8 flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden md:cursor-default ${shouldDisableMobileClick ? 'cursor-default' : 'cursor-pointer'} transition-all duration-150 ${shouldDisableMobileClick ? '' : 'active:scale-90 active:shadow-md'} md:active:scale-100 md:active:shadow-lg`}
+      style={{
+        backgroundColor: "rgba(255, 255, 255, 0.7)",
+        border: "1px solid rgba(255, 255, 255, 0.6)",
+        boxShadow: "0 4px 24px rgba(31, 41, 55, 0.10), 0 1px 4px rgba(31, 41, 55, 0.06)",
+      }}
       onClick={onMobileClick && !shouldDisableMobileClick ? (e) => {
-        // Only trigger on mobile (check if button is hidden)
         const target = e.target as HTMLElement;
         if (window.innerWidth < 768 && !target.closest('button')) {
           onMobileClick();
@@ -49,8 +53,8 @@ export function GenericCard({
     >
       {/* Decorative background icon - only visible on mobile */}
       {Icon && (
-        <div className={`absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-12 opacity-[0.08] pointer-events-none md:hidden ${flipMobileIcon ? 'scale-x-[-1]' : ''}`}>
-          <Icon className="h-40 w-40 text-light-brown" />
+        <div className={`absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-12 opacity-[0.06] pointer-events-none md:hidden ${flipMobileIcon ? 'scale-x-[-1]' : ''}`}>
+          <Icon className="h-40 w-40 text-davinci-black" />
         </div>
       )}
 
@@ -58,20 +62,20 @@ export function GenericCard({
         {/* Icon - only visible on desktop */}
         {Icon && (
           <div className="hidden md:flex mx-auto mb-4 md:mb-6 items-center justify-center">
-            <Icon className="w-6 h-6 md:w-10 md:h-10 text-light-brown" />
+            <Icon className="w-6 h-6 md:w-10 md:h-10 text-davinci-red" />
           </div>
         )}
 
         {/* Desktop title */}
         {title && (
-          <h3 className="hidden md:block text-lg md:text-2xl font-merriweather text-light-brown mb-4">
+          <h3 className="hidden md:block text-lg md:text-2xl font-body font-bold text-davinci-black mb-3">
             {title}
           </h3>
         )}
 
-        {/* Mobile title (from button text) with walking icon */}
+        {/* Mobile title with walking icon */}
         {(title || mobileTitle) && (
-          <h3 className="block md:hidden text-xl font-merriweather text-light-brown flex items-center justify-center gap-2 mb-4">
+          <h3 className="block md:hidden text-xl font-body font-bold text-davinci-black flex items-center justify-center gap-2 mb-3">
             {isLoading && showWalkingIcon && (
               <WalkingIcon className="w-6 h-6" />
             )}
@@ -80,26 +84,24 @@ export function GenericCard({
         )}
 
         {description && (
-          <p className="text-sm text-light-brown/90 font-merriweather mb-4 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
+          <p className="text-sm text-davinci-gray-600 font-body mb-4 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
             {description}
           </p>
         )}
 
-        {/* Queue messages and Button */}
         {children && (
           <div className="md:mt-auto [&>button]:hidden md:[&>button]:block">
             {children}
           </div>
         )}
 
-        {/* Cancel Button */}
         {showCancelButton && onCancelClick && (
           <button
             onClick={(e) => {
               e.stopPropagation();
               onCancelClick();
             }}
-            className="mt-3 px-4 py-2 text-base font-merriweather bg-light-brown hover:bg-light-brown/80 text-dark-brown rounded-lg transition-all duration-200 active:scale-95"
+            className="mt-3 px-4 py-2 text-base font-body bg-davinci-gray-200 hover:bg-davinci-gray-300 text-davinci-black rounded-full transition-all duration-200 active:scale-95"
           >
             {cancelButtonText}
           </button>
