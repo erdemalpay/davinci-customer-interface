@@ -19,6 +19,7 @@ export function FeedbackModal({
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
+  const [hoverRating, setHoverRating] = useState(0);
 
   if (!isOpen) return null;
 
@@ -46,13 +47,16 @@ export function FeedbackModal({
   };
 
   const renderStars = () => {
+    const activeRating = hoverRating || rating;
     return [...Array(5)].map((_, index) => (
       <button
         key={index}
         onClick={() => setRating(index + 1)}
-        className={`text-2xl transition-colors duration-200 ${
-          index < rating ? "text-yellow-400" : "text-gray-300"
-        } hover:text-yellow-400`}
+        onMouseEnter={() => setHoverRating(index + 1)}
+        onMouseLeave={() => setHoverRating(0)}
+        className={`text-2xl transition-colors duration-150 ${
+          index < activeRating ? "text-yellow-400" : "text-davinci-gray-600"
+        }`}
       >
         ★
       </button>
@@ -63,13 +67,19 @@ export function FeedbackModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-cream-bg rounded-2xl p-8 max-w-md w-full border-4 border-dark-brown shadow-2xl">
-        <h3 className="text-2xl font-merriweather text-dark-brown mb-6">
+      <div
+        className="rounded-2xl p-8 max-w-md w-full shadow-2xl"
+        style={{
+          backgroundColor: "#F7F3ED",
+          border: "1px solid rgba(31, 41, 55, 0.12)",
+        }}
+      >
+        <h3 className="text-2xl font-body font-bold text-davinci-black mb-6">
           {t("feedback.modalTitle")}
         </h3>
 
         <div className="mb-6">
-          <label className="block text-sm font-merriweather font-bold text-dark-brown mb-2">
+          <label className="block text-sm font-body font-semibold text-davinci-black mb-2">
             {t("feedback.rateLabel")}
           </label>
           <div className="flex justify-center gap-1">{renderStars()}</div>
@@ -77,13 +87,13 @@ export function FeedbackModal({
 
         <div className="flex flex-col gap-3">
           <div>
-            <label className="block text-sm font-merriweather font-bold text-dark-brown mb-2">
+            <label className="block text-sm font-body font-semibold text-davinci-black mb-2">
               {t("feedback.commentLabel")}
             </label>
             <textarea
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
-              className="w-full p-3 border-2 border-dark-brown rounded-lg focus:outline-none resize-none font-merriweather bg-white text-dark-brown placeholder:text-gray-400"
+              className="w-full p-3 border border-davinci-gray-300 rounded-lg focus:outline-none focus:border-davinci-red resize-none font-body bg-white text-davinci-black placeholder:text-davinci-gray-500"
               rows={4}
               placeholder={t("feedback.commentPlaceholder")}
             />
@@ -91,7 +101,7 @@ export function FeedbackModal({
 
           <div className="h-5 flex items-center justify-center">
             {showWarning && (
-              <p className="text-center text-dark-brown font-merriweather text-sm">
+              <p className="text-center text-davinci-red font-body text-sm">
                 {t("feedback.warning")}
               </p>
             )}
@@ -100,17 +110,24 @@ export function FeedbackModal({
           <div className="flex gap-3">
             <button
               onClick={handleClose}
-              className="flex-1 bg-light-brown hover:bg-light-brown/80 text-dark-brown font-merriweather font-semibold py-3 px-4 rounded-lg transition-colors duration-200 border-2 border-dark-brown"
+              className="flex-1 font-body font-semibold py-3 px-4 rounded-full transition-all duration-200"
+              style={{
+                background: "#A80000",
+                color: "#fff",
+                boxShadow: "0 4px 20px rgba(168,0,0,0.25)",
+              }}
             >
               {t("feedback.cancel")}
             </button>
             <button
               onClick={handleSubmit}
-              className={`flex-1 font-merriweather font-semibold py-3 px-4 rounded-lg transition-colors duration-200 border-2 border-dark-brown ${
-                isFormValid
-                  ? "bg-dark-brown hover:bg-dark-brown/90 text-light-brown"
-                  : "bg-light-brown text-dark-brown cursor-not-allowed"
-              }`}
+              className="flex-1 font-body font-semibold py-3 px-4 rounded-full transition-all duration-200"
+              style={{
+                background: isFormValid ? "#1F2937" : "var(--gray-300, #DDE3EB)",
+                color: isFormValid ? "#fff" : "#9AA5B4",
+                cursor: isFormValid ? "pointer" : "not-allowed",
+                boxShadow: isFormValid ? "0 4px 20px rgba(31,41,55,0.25)" : "none",
+              }}
             >
               {t("feedback.submit")}
             </button>

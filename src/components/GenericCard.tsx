@@ -38,9 +38,16 @@ export function GenericCard({
 
   return (
     <div
-      className={`relative bg-dark-brown backdrop-blur-sm rounded-xl p-6 md:p-8 border border-dark-brown/50 shadow-lg flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden md:cursor-default ${shouldDisableMobileClick ? 'cursor-default' : 'cursor-pointer'} transition-all duration-150 ${shouldDisableMobileClick ? '' : 'active:scale-90 active:shadow-md'} md:active:scale-100 md:active:shadow-lg`}
+      className={`
+        relative rounded-xl p-6 md:p-8 flex flex-col h-full min-h-[180px] md:min-h-0 overflow-hidden
+        md:cursor-default md:backdrop-blur-sm
+        bg-[#1F2937] md:bg-white/70
+        border border-white/10 md:border-white/60
+        shadow-[0_4px_24px_rgba(0,0,0,0.20)] md:shadow-[0_4px_24px_rgba(31,41,55,0.10)]
+        transition-all duration-150
+        ${shouldDisableMobileClick ? 'cursor-default' : 'cursor-pointer active:scale-90 active:shadow-md md:active:scale-100 md:active:shadow-lg'}
+      `}
       onClick={onMobileClick && !shouldDisableMobileClick ? (e) => {
-        // Only trigger on mobile (check if button is hidden)
         const target = e.target as HTMLElement;
         if (window.innerWidth < 768 && !target.closest('button')) {
           onMobileClick();
@@ -49,8 +56,8 @@ export function GenericCard({
     >
       {/* Decorative background icon - only visible on mobile */}
       {Icon && (
-        <div className={`absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-12 opacity-[0.08] pointer-events-none md:hidden ${flipMobileIcon ? 'scale-x-[-1]' : ''}`}>
-          <Icon className="h-40 w-40 text-light-brown" />
+        <div className={`absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-12 opacity-10 pointer-events-none md:hidden ${flipMobileIcon ? 'scale-x-[-1]' : ''}`}>
+          <Icon className="h-40 w-40 text-white" />
         </div>
       )}
 
@@ -58,20 +65,20 @@ export function GenericCard({
         {/* Icon - only visible on desktop */}
         {Icon && (
           <div className="hidden md:flex mx-auto mb-4 md:mb-6 items-center justify-center">
-            <Icon className="w-6 h-6 md:w-10 md:h-10 text-light-brown" />
+            <Icon className="w-6 h-6 md:w-10 md:h-10 text-davinci-black-deep" />
           </div>
         )}
 
         {/* Desktop title */}
         {title && (
-          <h3 className="hidden md:block text-lg md:text-2xl font-merriweather text-light-brown mb-4">
+          <h3 className="hidden md:block text-lg md:text-2xl font-body font-bold text-davinci-black mb-3">
             {title}
           </h3>
         )}
 
-        {/* Mobile title (from button text) with walking icon */}
+        {/* Mobile title with walking icon */}
         {(title || mobileTitle) && (
-          <h3 className="block md:hidden text-xl font-merriweather text-light-brown flex items-center justify-center gap-2 mb-4">
+          <h3 className="block md:hidden text-xl font-body font-bold text-white flex items-center justify-center gap-2 mb-3">
             {isLoading && showWalkingIcon && (
               <WalkingIcon className="w-6 h-6" />
             )}
@@ -80,26 +87,24 @@ export function GenericCard({
         )}
 
         {description && (
-          <p className="text-sm text-light-brown/90 font-merriweather mb-4 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
+          <p className="text-sm text-white/70 md:text-davinci-gray-600 font-body mb-4 min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center px-1">
             {description}
           </p>
         )}
 
-        {/* Queue messages and Button */}
         {children && (
           <div className="md:mt-auto [&>button]:hidden md:[&>button]:block">
             {children}
           </div>
         )}
 
-        {/* Cancel Button */}
         {showCancelButton && onCancelClick && (
           <button
             onClick={(e) => {
               e.stopPropagation();
               onCancelClick();
             }}
-            className="mt-3 px-4 py-2 text-base font-merriweather bg-light-brown hover:bg-light-brown/80 text-dark-brown rounded-lg transition-all duration-200 active:scale-95"
+            className="mt-3 px-4 py-2 text-base font-body rounded-full transition-all duration-200 active:scale-95 bg-davinci-red hover:bg-davinci-red-dark text-white md:bg-davinci-black-deep md:hover:bg-davinci-black"
           >
             {cancelButtonText}
           </button>
