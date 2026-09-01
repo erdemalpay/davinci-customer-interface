@@ -9,6 +9,22 @@ export enum ButtonCallType {
   ALL = "all",
 }
 
+export enum ButtonCallActionEnum {
+  CREATE = "create",
+  RECALL = "recall",
+  CLOSE = "close",
+}
+
+export interface ScreenImage {
+  url: string;
+}
+
+export interface ButtonCallChangedPayload {
+  location?: number;
+  type?: ButtonCallTypeEnum;
+  action?: ButtonCallActionEnum;
+}
+
 export enum LocationEnum {
   BAHCELI = 1,
   NEORAMA = 2,

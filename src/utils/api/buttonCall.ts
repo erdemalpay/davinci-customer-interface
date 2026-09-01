@@ -11,6 +11,8 @@ import { Paths, useGet, useGetList, useMutationApi } from "./factory";
 
 const baseUrl = `${Paths.ButtonCalls}`;
 
+const ACTIVE_CALLS_REFETCH_INTERVAL = 10000;
+
 export interface ButtonCallsPayload {
   data: ButtonCall[];
   totalNumber: number;
@@ -61,7 +63,8 @@ export function useGetQueue(location: number, tableName: string) {
   return useGet<QueueResponse>(
     url,
     [baseUrl, "queue", location, tableName],
-    true
+    true,
+    ACTIVE_CALLS_REFETCH_INTERVAL
   );
 }
 
@@ -72,7 +75,9 @@ export function useGetActiveButtonCalls(
   const today = new Date().toISOString().split("T")[0];
   return useGetList<ButtonCall>(
     `${Paths.ButtonCalls}?location=${location}&date=${today}&type=${type}`,
-    [`${Paths.ButtonCalls}`, location, today, type]
+    [`${Paths.ButtonCalls}`, location, today, type],
+    true,
+    ACTIVE_CALLS_REFETCH_INTERVAL
   );
 }
 

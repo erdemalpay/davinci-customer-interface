@@ -1,18 +1,21 @@
 import { FaDice } from "react-icons/fa";
-import { HiBellAlert } from "react-icons/hi2";
+import { HiBellAlert, HiSpeakerXMark } from "react-icons/hi2";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { useParams } from "react-router-dom";
+import { ScreenImageSlideshow } from "../components/ScreenImageSlideshow";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { ButtonCall, ButtonCallTypeEnum } from "../types";
+import { useGetScreenImages } from "../utils/api/asset";
 import { useGetActiveButtonCalls } from "../utils/api/buttonCall";
 import logoUrl from "../assets/images/logo.png";
 
 export default function ActiveButtonCallsPage() {
-  useWebSocket();
   const { location } = useParams<{ location: string }>();
   const selectedLocationId = Number(location);
+  const { isAudioBlocked } = useWebSocket(selectedLocationId);
 
   const buttonCalls = useGetActiveButtonCalls(selectedLocationId);
+  const screenImages = useGetScreenImages();
 
   const activeButtonCalls = buttonCalls?.reduce(
     (acc: { active: ButtonCall[] }, buttonCall: ButtonCall) => {
@@ -79,6 +82,15 @@ export default function ActiveButtonCallsPage() {
 
   const sizes = getDynamicSizes();
 
+  const audioLockBadge = isAudioBlocked ? (
+    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full bg-davinci-black/80 px-6 py-4 text-white shadow-xl cursor-pointer">
+      <HiSpeakerXMark className="text-3xl" />
+      <span className="font-body text-xl font-semibold">
+        Press Any Button To Enable Sound
+      </span>
+    </div>
+  ) : null;
+
   const renderCallGroup = (calls: ButtonCall[], type: ButtonCallTypeEnum) => {
     if (calls.length === 0) return null;
 
@@ -100,6 +112,15 @@ export default function ActiveButtonCallsPage() {
     );
   };
 
+  if (activeButtonCalls.length === 0 && screenImages.length > 0) {
+    return (
+      <>
+        <ScreenImageSlideshow images={screenImages} />
+        {audioLockBadge}
+      </>
+    );
+  }
+
   if (activeButtonCalls.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen relative overflow-hidden" style={{ backgroundColor: "#F7F3ED" }}>
@@ -117,6 +138,7 @@ export default function ActiveButtonCallsPage() {
           <HiBellAlert className="text-8xl text-davinci-gray-300 mx-auto mb-4" />
           <p className="text-3xl text-davinci-gray-500 font-body font-medium">No Active Button Calls</p>
         </div>
+        {audioLockBadge}
       </div>
     );
   }
@@ -162,6 +184,8 @@ export default function ActiveButtonCallsPage() {
           </div>
         </div>
       </div>
+
+      {audioLockBadge}
     </div>
   );
 }
