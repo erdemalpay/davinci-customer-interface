@@ -21,6 +21,7 @@ const SOUND_PATHS: Record<ButtonCallTypeEnum, string> = {
   [ButtonCallTypeEnum.GAMEMASTERCALL]: "/sounds/gameMasterCall.wav",
   [ButtonCallTypeEnum.TABLECALL]: "/sounds/gameMasterCall.wav",
   [ButtonCallTypeEnum.ORDERCALL]: "/sounds/orderCall.wav",
+  [ButtonCallTypeEnum.ORDERREADYCALL]: "/sounds/orderReadyCall.wav",
 };
 
 export function useWebSocket(soundLocation?: number) {

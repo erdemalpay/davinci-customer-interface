@@ -1,6 +1,6 @@
 import { FaDice } from "react-icons/fa";
 import { HiBellAlert, HiSpeakerXMark } from "react-icons/hi2";
-import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { MdOutlineRestaurantMenu, MdOutlineRoomService } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { ScreenImageSlideshow } from "../components/ScreenImageSlideshow";
 import { useWebSocket } from "../hooks/useWebSocket";
@@ -39,6 +39,9 @@ export default function ActiveButtonCallsPage() {
     order: activeButtonCalls.filter(
       (call: ButtonCall) => call.type === ButtonCallTypeEnum.ORDERCALL,
     ),
+    orderReady: activeButtonCalls.filter(
+      (call: ButtonCall) => call.type === ButtonCallTypeEnum.ORDERREADYCALL,
+    ),
   };
 
   function getBackgroundColor(type: ButtonCallTypeEnum) {
@@ -49,6 +52,8 @@ export default function ActiveButtonCallsPage() {
         return "bg-blue-500";
       case ButtonCallTypeEnum.ORDERCALL:
         return "bg-davinci-red";
+      case ButtonCallTypeEnum.ORDERREADYCALL:
+        return "bg-purple-500";
       default:
         return "bg-green-500";
     }
@@ -62,6 +67,8 @@ export default function ActiveButtonCallsPage() {
         return <FaDice className="text-6xl" />;
       case ButtonCallTypeEnum.ORDERCALL:
         return <MdOutlineRestaurantMenu className="text-6xl" />;
+      case ButtonCallTypeEnum.ORDERREADYCALL:
+        return <MdOutlineRoomService className="text-6xl" />;
       default:
         return <HiBellAlert className="text-6xl" />;
     }
@@ -70,13 +77,13 @@ export default function ActiveButtonCallsPage() {
   const totalCalls = activeButtonCalls.length;
   const getDynamicSizes = () => {
     if (totalCalls <= 6) {
-      return { cardText: "text-8xl", cardPadding: "px-16 py-14", cardSize: "min-h-[180px] min-w-[220px]", iconSize: "text-7xl", gap: "gap-6", mbGroup: "mb-10" };
+      return { cardText: "text-8xl", cardPadding: "px-4 py-14", cardSize: "min-h-[180px] w-[320px]", iconSize: "text-7xl", gap: "gap-6", mbGroup: "mb-10" };
     } else if (totalCalls <= 12) {
-      return { cardText: "text-7xl", cardPadding: "px-14 py-12", cardSize: "min-h-[160px] min-w-[190px]", iconSize: "text-6xl", gap: "gap-5", mbGroup: "mb-9" };
+      return { cardText: "text-7xl", cardPadding: "px-4 py-12", cardSize: "min-h-[160px] w-[280px]", iconSize: "text-6xl", gap: "gap-5", mbGroup: "mb-9" };
     } else if (totalCalls <= 18) {
-      return { cardText: "text-6xl", cardPadding: "px-12 py-10", cardSize: "min-h-[140px] min-w-[160px]", iconSize: "text-5xl", gap: "gap-4", mbGroup: "mb-8" };
+      return { cardText: "text-6xl", cardPadding: "px-4 py-10", cardSize: "min-h-[140px] w-[240px]", iconSize: "text-5xl", gap: "gap-4", mbGroup: "mb-8" };
     } else {
-      return { cardText: "text-5xl", cardPadding: "px-10 py-8", cardSize: "min-h-[120px] min-w-[140px]", iconSize: "text-4xl", gap: "gap-3", mbGroup: "mb-7" };
+      return { cardText: "text-5xl", cardPadding: "px-4 py-8", cardSize: "min-h-[120px] w-[200px]", iconSize: "text-4xl", gap: "gap-3", mbGroup: "mb-7" };
     }
   };
 
@@ -181,6 +188,8 @@ export default function ActiveButtonCallsPage() {
               renderCallGroup(groupedCalls.gameMasterAndTable, ButtonCallTypeEnum.GAMEMASTERCALL)}
             {groupedCalls.order.length > 0 &&
               renderCallGroup(groupedCalls.order, ButtonCallTypeEnum.ORDERCALL)}
+            {groupedCalls.orderReady.length > 0 &&
+              renderCallGroup(groupedCalls.orderReady, ButtonCallTypeEnum.ORDERREADYCALL)}
           </div>
         </div>
       </div>

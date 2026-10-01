@@ -2,6 +2,7 @@ export enum ButtonCallTypeEnum {
   TABLECALL = "TABLECALL",
   GAMEMASTERCALL = "GAMEMASTERCALL",
   ORDERCALL = "ORDERCALL",
+  ORDERREADYCALL = "ORDERREADYCALL",
 }
 
 export enum ButtonCallType {
