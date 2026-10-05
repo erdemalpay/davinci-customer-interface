@@ -2,23 +2,57 @@ import { ArrowLeft, BookOpen, HelpCircle, Lightbulb, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GmCallReasonEnum } from "../types";
-import { useGetGamesMinimal } from "../utils/api/game";
+import {
+  GameAvailability,
+  GameAvailabilityStatus,
+  checkGameAvailability,
+  useGetGamesMinimal,
+} from "../utils/api/game";
 
 const MAX_GAME_RESULTS = 30;
 
 interface GameMasterCallModalProps {
+  location: number;
+  tableName: string;
   onClose: () => void;
   onSubmit: (reason: GmCallReasonEnum, game?: number) => void;
 }
 
 // Mounted only while open, so the game list is fetched on demand.
 export function GameMasterCallModal({
+  location,
+  tableName,
   onClose,
   onSubmit,
 }: GameMasterCallModalProps): JSX.Element {
   const { t } = useTranslation();
-  const [step, setStep] = useState<"reason" | "game">("reason");
+  const [step, setStep] = useState<"reason" | "game" | "unmet">("reason");
   const [search, setSearch] = useState("");
+  const [selectedGame, setSelectedGame] = useState<number>();
+  const [availability, setAvailability] = useState<GameAvailability>();
+  const [isChecking, setIsChecking] = useState(false);
+
+  // Before calling for an explanation, check whether someone who knows the
+  // game is free; otherwise let the table wait in line or pick another game.
+  const handleGameSelect = async (game: number) => {
+    setIsChecking(true);
+    try {
+      const result = await checkGameAvailability({ location, tableName, game });
+      if (result.status === GameAvailabilityStatus.AVAILABLE) {
+        onSubmit(GmCallReasonEnum.EXPLANATION, game);
+        return;
+      }
+      setSelectedGame(game);
+      setAvailability(result);
+      setStep("unmet");
+    } catch {
+      // Still call; the API keeps the request waiting for someone who
+      // knows the game.
+      onSubmit(GmCallReasonEnum.EXPLANATION, game);
+    } finally {
+      setIsChecking(false);
+    }
+  };
 
   const reasons = [
     {
@@ -58,9 +92,9 @@ export function GameMasterCallModal({
         }}
       >
         <div className="flex items-center justify-between mb-5 gap-2">
-          {step === "game" ? (
+          {step !== "reason" ? (
             <button
-              onClick={() => setStep("reason")}
+              onClick={() => setStep(step === "unmet" ? "game" : "reason")}
               aria-label={t("back")}
               className="p-1 -ml-1 text-davinci-black/70 hover:text-davinci-black"
             >
@@ -72,7 +106,9 @@ export function GameMasterCallModal({
           <h3 className="text-xl md:text-2xl font-body font-bold text-davinci-black text-center flex-1">
             {step === "reason"
               ? t("gamemaster.chooseReason")
-              : t("gamemaster.chooseGame")}
+              : step === "game"
+                ? t("gamemaster.chooseGame")
+                : t("gamemaster.unmet.title")}
           </h3>
           <button
             onClick={onClose}
@@ -97,14 +133,83 @@ export function GameMasterCallModal({
               </button>
             ))}
           </div>
-        ) : (
+        ) : step === "game" ? (
           <GamePicker
             search={search}
             onSearch={setSearch}
-            onSelect={(game) => onSubmit(GmCallReasonEnum.EXPLANATION, game)}
+            onSelect={handleGameSelect}
+            disabled={isChecking}
+          />
+        ) : (
+          <UnmetRequestChoice
+            availability={availability!}
+            onWait={() => onSubmit(GmCallReasonEnum.EXPLANATION, selectedGame)}
+            onPickAnotherGame={() => setStep("game")}
+            onAskRecommendation={() =>
+              onSubmit(GmCallReasonEnum.RECOMMENDATION)
+            }
           />
         )}
       </div>
+    </div>
+  );
+}
+
+function UnmetRequestChoice({
+  availability,
+  onWait,
+  onPickAnotherGame,
+  onAskRecommendation,
+}: {
+  availability: GameAvailability;
+  onWait: () => void;
+  onPickAnotherGame: () => void;
+  onAskRecommendation: () => void;
+}) {
+  const { t } = useTranslation();
+  const canWait = availability.status !== GameAvailabilityStatus.UNAVAILABLE;
+  const message =
+    availability.status === GameAvailabilityStatus.BUSY
+      ? t("gamemaster.unmet.busy")
+      : availability.status === GameAvailabilityStatus.LATER
+        ? t("gamemaster.unmet.later", { hour: availability.availableFrom })
+        : t("gamemaster.unmet.unavailable");
+
+  const buttonClass =
+    "w-full rounded-xl px-4 py-4 font-body font-semibold transition-transform active:scale-[0.98]";
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="font-body text-davinci-black/80 text-center mb-2">
+        {message}
+      </p>
+      {canWait && (
+        <button
+          onClick={onWait}
+          className={`${buttonClass} text-white`}
+          style={{ background: "#1F2937" }}
+        >
+          {t("gamemaster.unmet.wait")}
+        </button>
+      )}
+      <button
+        onClick={onPickAnotherGame}
+        className={`${buttonClass} ${
+          canWait
+            ? "border border-davinci-black/30 text-davinci-black"
+            : "text-white"
+        }`}
+        style={canWait ? undefined : { background: "#1F2937" }}
+      >
+        {t("gamemaster.unmet.pickAnotherGame")}
+      </button>
+      {!canWait && (
+        <button
+          onClick={onAskRecommendation}
+          className={`${buttonClass} border border-davinci-black/30 text-davinci-black`}
+        >
+          {t("gamemaster.reasons.recommendation")}
+        </button>
+      )}
     </div>
   );
 }
@@ -113,10 +218,12 @@ function GamePicker({
   search,
   onSearch,
   onSelect,
+  disabled,
 }: {
   search: string;
   onSearch: (value: string) => void;
   onSelect: (game: number) => void;
+  disabled: boolean;
 }) {
   const { t, i18n } = useTranslation();
   const games = useGetGamesMinimal();
@@ -126,7 +233,7 @@ function GamePicker({
     if (!query) return [];
     return games
       .filter((game) =>
-        game.name.toLocaleLowerCase(i18n.language).includes(query)
+        game.name.toLocaleLowerCase(i18n.language).includes(query),
       )
       .slice(0, MAX_GAME_RESULTS);
   }, [games, search, i18n.language]);
@@ -145,7 +252,8 @@ function GamePicker({
           <li key={game._id}>
             <button
               onClick={() => onSelect(game._id)}
-              className="w-full text-left px-4 py-3 rounded-lg font-body text-davinci-black hover:bg-davinci-black/5 active:bg-davinci-black/10"
+              disabled={disabled}
+              className="w-full text-left px-4 py-3 rounded-lg font-body text-davinci-black hover:bg-davinci-black/5 active:bg-davinci-black/10 disabled:opacity-50"
             >
               {game.name}
             </button>

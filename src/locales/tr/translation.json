@@ -17,6 +17,14 @@
       "recommendation": "Oyun tavsiyesi istiyorum",
       "explanation": "Oyun anlatımı istiyorum",
       "question": "Oynadığım oyunla ilgili bir sorum var"
+    },
+    "unmet": {
+      "title": "Bu oyun için şu an müsait kimse yok",
+      "busy": "Şu anda bu oyunu bilen arkadaşlarımız meşgul. Dilerseniz sıraya girebilirsiniz, müsait olur olmaz size gelecekler. Dilerseniz başka bir oyun seçebilirsiniz.",
+      "later": "Bu oyunu bilen arkadaşımız saat {{hour}} itibarıyla kafede olacak. Dilerseniz sıraya girebilir, dilerseniz başka bir oyun seçebilirsiniz.",
+      "unavailable": "Maalesef bugün kafede bu oyunu bilen kimse yok. Başka bir oyun seçmek ister misiniz?",
+      "wait": "Sıraya gir",
+      "pickAnotherGame": "Başka oyun seç"
     }
   },
   "service": {

@@ -17,6 +17,14 @@
       "recommendation": "I want a game recommendation",
       "explanation": "I want a game explained",
       "question": "I have a question about the game we're playing"
+    },
+    "unmet": {
+      "title": "This game isn't available right now",
+      "busy": "Everyone who knows this game is busy at the moment. You can wait in line and they'll come to you as soon as they're free, or pick another game.",
+      "later": "Someone who knows this game will be in the cafe from {{hour}}. You can wait in line or pick another game.",
+      "unavailable": "Unfortunately nobody who knows this game is in the cafe today. Would you like to pick another game?",
+      "wait": "Wait in line",
+      "pickAnotherGame": "Pick another game"
     }
   },
   "service": {

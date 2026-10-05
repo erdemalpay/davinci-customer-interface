@@ -332,6 +332,8 @@ function App() {
 
       {showGameMasterModal && (
         <GameMasterCallModal
+          location={Number(location)}
+          tableName={tableName}
           onClose={() => setShowGameMasterModal(false)}
           onSubmit={submitGameMasterCall}
         />
