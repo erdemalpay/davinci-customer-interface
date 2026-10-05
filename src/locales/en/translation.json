@@ -8,7 +8,16 @@
     "title": "Game Help",
     "description": "Request help with game rules",
     "button": "Call the Game Master",
-    "calling": "Calling..."
+    "calling": "Calling...",
+    "chooseReason": "How can we help?",
+    "chooseGame": "Which game?",
+    "searchGame": "Search for a game",
+    "noGameFound": "No game found",
+    "reasons": {
+      "recommendation": "I want a game recommendation",
+      "explanation": "I want a game explained",
+      "question": "I have a question about the game we're playing"
+    }
   },
   "service": {
     "title": "Order",
@@ -49,5 +58,7 @@
     "noWait": "No wait",
     "yourTurn": "You're next!"
   },
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "back": "Back",
+  "close": "Close"
 }

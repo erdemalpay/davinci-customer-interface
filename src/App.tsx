@@ -4,10 +4,11 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Button } from "./components/Button";
 import { FeedbackModal } from "./components/FeedbackModal";
+import { GameMasterCallModal } from "./components/GameMasterCallModal";
 import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { useWebSocket } from "./hooks/useWebSocket";
-import { ButtonCallTypeEnum, LocationEnum } from "./types";
+import { ButtonCallTypeEnum, GmCallReasonEnum, LocationEnum } from "./types";
 import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
 import { getOrdinal } from "./utils/ordinal";
@@ -25,6 +26,7 @@ function App() {
 
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [showGameMasterModal, setShowGameMasterModal] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const { createFeedback } = useFeedbackMutations();
   const { createButtonCall, closeButtonCallFromPanel } = useButtonCallMutations();
@@ -75,12 +77,21 @@ function App() {
 
   const locationName = getLocationName(Number(location));
 
+  // The table first picks why it needs a game master; the reason (and the
+  // game for an explanation) decides who gets assigned.
   const handleGameMasterCall = () => {
+    setShowGameMasterModal(true);
+  };
+
+  const submitGameMasterCall = (reason: GmCallReasonEnum, game?: number) => {
+    setShowGameMasterModal(false);
     setActiveRequest("gamemaster");
     createButtonCall({
       location: Number(location),
       type: ButtonCallTypeEnum.GAMEMASTERCALL,
       tableName: tableName,
+      gmCallReason: reason,
+      ...(game !== undefined && { game }),
       hour: new Date().toLocaleTimeString("tr-TR", {
         hour: "2-digit",
         minute: "2-digit",
@@ -318,6 +329,13 @@ function App() {
           </div>
         </div>
       </div>
+
+      {showGameMasterModal && (
+        <GameMasterCallModal
+          onClose={() => setShowGameMasterModal(false)}
+          onSubmit={submitGameMasterCall}
+        />
+      )}
 
       <FeedbackModal
         isOpen={showFeedbackForm}

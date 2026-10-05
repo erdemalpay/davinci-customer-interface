@@ -39,6 +39,15 @@ export type Feedback = {
   table: number;
   createdAt: Date;
 };
+export enum GmCallReasonEnum {
+  RECOMMENDATION = "RECOMMENDATION",
+  EXPLANATION = "EXPLANATION",
+  QUESTION = "QUESTION",
+}
+export type MinimalGame = {
+  _id: number;
+  name: string;
+};
 export type ButtonCall = {
   _id: string;
   tableName: string;
@@ -51,6 +60,8 @@ export type ButtonCall = {
   createdBy?: string;
   cancelledBy?: string;
   cancelledByName?: string;
+  gmCallReason?: GmCallReasonEnum;
+  game?: number;
   duration?: number;
   callCount: number;
 };

@@ -8,7 +8,16 @@
     "title": "Oyun Yardımı",
     "description": "Oyun kuralları için yardım isteyin",
     "button": "Game Master Çağır",
-    "calling": "Çağrılıyor..."
+    "calling": "Çağrılıyor...",
+    "chooseReason": "Nasıl yardımcı olalım?",
+    "chooseGame": "Hangi oyun?",
+    "searchGame": "Oyun ara",
+    "noGameFound": "Oyun bulunamadı",
+    "reasons": {
+      "recommendation": "Oyun tavsiyesi istiyorum",
+      "explanation": "Oyun anlatımı istiyorum",
+      "question": "Oynadığım oyunla ilgili bir sorum var"
+    }
   },
   "service": {
     "title": "Sipariş",
@@ -49,5 +58,7 @@
     "noWait": "Bekleyen masa yok",
     "yourTurn": "Sıra sizde!"
   },
-  "cancel": "İptal"
+  "cancel": "İptal",
+  "back": "Geri",
+  "close": "Kapat"
 }
