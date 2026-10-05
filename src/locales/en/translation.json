@@ -13,7 +13,7 @@
   "service": {
     "title": "Order",
     "description": "Call service staff to place an order",
-    "button": "Place an Order",
+    "button": "Call Service",
     "calling": "Calling..."
   },
   "menu": {

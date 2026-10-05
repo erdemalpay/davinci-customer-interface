@@ -288,7 +288,7 @@ function App() {
             )}
           </GenericCard>
 
-          <div className="col-span-1 md:col-span-1">
+          <div className="col-span-1 md:col-span-1 order-first md:order-none">
             <GenericCard
               icon={UtensilsCrossed}
               title={t("menu.title")}

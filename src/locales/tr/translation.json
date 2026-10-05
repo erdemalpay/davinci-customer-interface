@@ -13,7 +13,7 @@
   "service": {
     "title": "Sipariş",
     "description": "Sipariş vermek için servis personeli çağırın",
-    "button": "Sipariş Ver",
+    "button": "Servis Çağır",
     "calling": "Çağrılıyor..."
   },
   "menu": {
