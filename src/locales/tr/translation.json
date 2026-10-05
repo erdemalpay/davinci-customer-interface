@@ -25,6 +25,11 @@
       "unavailable": "Maalesef bugün kafede bu oyunu bilen kimse yok. Başka bir oyun seçmek ister misiniz?",
       "wait": "Sıraya gir",
       "pickAnotherGame": "Başka oyun seç"
+    },
+    "declined": {
+      "title": "Bu oyunu şu an anlatamıyoruz",
+      "message": "Bu oyunu bilen arkadaşımız şu an gelemiyor. Başka bir oyun seçmek ister misiniz?",
+      "cancelCall": "Çağrıyı iptal et"
     }
   },
   "service": {

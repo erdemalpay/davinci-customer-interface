@@ -16,7 +16,13 @@ interface GameMasterCallModalProps {
   tableName: string;
   onClose: () => void;
   onSubmit: (reason: GmCallReasonEnum, game?: number) => void;
+  // Everyone who knows the requested game declined the table's call: start
+  // by offering another game instead of asking for a reason.
+  explainerDeclined?: boolean;
+  onCancelCall?: () => void;
 }
+
+type Step = "reason" | "game" | "unmet" | "declined";
 
 // Mounted only while open, so the game list is fetched on demand.
 export function GameMasterCallModal({
@@ -24,9 +30,12 @@ export function GameMasterCallModal({
   tableName,
   onClose,
   onSubmit,
+  explainerDeclined = false,
+  onCancelCall,
 }: GameMasterCallModalProps): JSX.Element {
   const { t } = useTranslation();
-  const [step, setStep] = useState<"reason" | "game" | "unmet">("reason");
+  const firstStep: Step = explainerDeclined ? "declined" : "reason";
+  const [step, setStep] = useState<Step>(firstStep);
   const [search, setSearch] = useState("");
   const [selectedGame, setSelectedGame] = useState<number>();
   const [availability, setAvailability] = useState<GameAvailability>();
@@ -92,9 +101,9 @@ export function GameMasterCallModal({
         }}
       >
         <div className="flex items-center justify-between mb-5 gap-2">
-          {step !== "reason" ? (
+          {step !== firstStep ? (
             <button
-              onClick={() => setStep(step === "unmet" ? "game" : "reason")}
+              onClick={() => setStep(step === "unmet" ? "game" : firstStep)}
               aria-label={t("back")}
               className="p-1 -ml-1 text-davinci-black/70 hover:text-davinci-black"
             >
@@ -108,7 +117,9 @@ export function GameMasterCallModal({
               ? t("gamemaster.chooseReason")
               : step === "game"
                 ? t("gamemaster.chooseGame")
-                : t("gamemaster.unmet.title")}
+                : step === "declined"
+                  ? t("gamemaster.declined.title")
+                  : t("gamemaster.unmet.title")}
           </h3>
           <button
             onClick={onClose}
@@ -119,7 +130,34 @@ export function GameMasterCallModal({
           </button>
         </div>
 
-        {step === "reason" ? (
+        {step === "declined" ? (
+          <div className="flex flex-col gap-3">
+            <p className="font-body text-davinci-black/80 text-center mb-2">
+              {t("gamemaster.declined.message")}
+            </p>
+            <button
+              onClick={() => setStep("game")}
+              className="w-full rounded-xl px-4 py-4 font-body font-semibold text-white transition-transform active:scale-[0.98]"
+              style={{ background: "#1F2937" }}
+            >
+              {t("gamemaster.unmet.pickAnotherGame")}
+            </button>
+            <button
+              onClick={() => onSubmit(GmCallReasonEnum.RECOMMENDATION)}
+              className="w-full rounded-xl px-4 py-4 font-body font-semibold border border-davinci-black/30 text-davinci-black transition-transform active:scale-[0.98]"
+            >
+              {t("gamemaster.reasons.recommendation")}
+            </button>
+            {onCancelCall && (
+              <button
+                onClick={onCancelCall}
+                className="w-full rounded-xl px-4 py-3 font-body text-davinci-black/70 underline"
+              >
+                {t("gamemaster.declined.cancelCall")}
+              </button>
+            )}
+          </div>
+        ) : step === "reason" ? (
           <div className="flex flex-col gap-3">
             {reasons.map(({ reason, icon: Icon, label }) => (
               <button

@@ -25,6 +25,11 @@
       "unavailable": "Unfortunately nobody who knows this game is in the cafe today. Would you like to pick another game?",
       "wait": "Wait in line",
       "pickAnotherGame": "Pick another game"
+    },
+    "declined": {
+      "title": "We can't explain this game right now",
+      "message": "The friend who knows this game can't make it at the moment. Would you like to pick another game?",
+      "cancelCall": "Cancel the call"
     }
   },
   "service": {

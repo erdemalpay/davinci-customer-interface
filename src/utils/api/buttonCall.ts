@@ -36,8 +36,28 @@ export interface QueuePayload {
   position: number;
   waitingCount: number;
   totalActive: number;
+  callId?: number;
+  // Everyone who knows the requested game declined the call.
+  explainerUnavailable?: boolean;
 }
 export type QueueResponse = Record<string, QueuePayload>;
+
+// Replaces the reason / game of the table's open game master call, keeping
+// its place in the queue.
+export function changeGmCallRequest(
+  callId: number,
+  payload: {
+    location: number;
+    tableName: string;
+    gmCallReason: string;
+    game?: number;
+  }
+) {
+  return post<typeof payload, ButtonCall>({
+    path: `${baseUrl}/${callId}/change-request`,
+    payload,
+  });
+}
 
 export function useButtonCallMutations() {
   const { createItem: createButtonCall } = useMutationApi<ButtonCallInput>({
