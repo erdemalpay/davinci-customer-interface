@@ -77,13 +77,13 @@ export default function ActiveButtonCallsPage() {
   const totalCalls = activeButtonCalls.length;
   const getDynamicSizes = () => {
     if (totalCalls <= 6) {
-      return { cardText: "text-8xl", cardPadding: "px-4 py-14", cardSize: "min-h-[180px] w-[320px]", iconSize: "text-7xl", gap: "gap-6", mbGroup: "mb-10" };
+      return { cardText: "text-8xl", assigneeText: "text-4xl", cardPadding: "px-4 py-14", cardSize: "min-h-[180px] w-[320px]", iconSize: "text-7xl", gap: "gap-6", mbGroup: "mb-10" };
     } else if (totalCalls <= 12) {
-      return { cardText: "text-7xl", cardPadding: "px-4 py-12", cardSize: "min-h-[160px] w-[280px]", iconSize: "text-6xl", gap: "gap-5", mbGroup: "mb-9" };
+      return { cardText: "text-7xl", assigneeText: "text-3xl", cardPadding: "px-4 py-12", cardSize: "min-h-[160px] w-[280px]", iconSize: "text-6xl", gap: "gap-5", mbGroup: "mb-9" };
     } else if (totalCalls <= 18) {
-      return { cardText: "text-6xl", cardPadding: "px-4 py-10", cardSize: "min-h-[140px] w-[240px]", iconSize: "text-5xl", gap: "gap-4", mbGroup: "mb-8" };
+      return { cardText: "text-6xl", assigneeText: "text-2xl", cardPadding: "px-4 py-10", cardSize: "min-h-[140px] w-[240px]", iconSize: "text-5xl", gap: "gap-4", mbGroup: "mb-8" };
     } else {
-      return { cardText: "text-5xl", cardPadding: "px-4 py-8", cardSize: "min-h-[120px] w-[200px]", iconSize: "text-4xl", gap: "gap-3", mbGroup: "mb-7" };
+      return { cardText: "text-5xl", assigneeText: "text-xl", cardPadding: "px-4 py-8", cardSize: "min-h-[120px] w-[200px]", iconSize: "text-4xl", gap: "gap-3", mbGroup: "mb-7" };
     }
   };
 
@@ -108,10 +108,15 @@ export default function ActiveButtonCallsPage() {
           {calls.map((buttonCall: ButtonCall) => (
             <div
               key={buttonCall._id}
-              className={`${getBackgroundColor(buttonCall.type)} relative text-white ${sizes.cardPadding} rounded-3xl shadow-xl transition-all duration-200 flex items-center justify-center cursor-pointer ${sizes.cardSize}`}
+              className={`${getBackgroundColor(buttonCall.type)} relative text-white ${sizes.cardPadding} rounded-3xl shadow-xl transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${sizes.cardSize}`}
               title={buttonCall.tableName}
             >
               <span className={`${sizes.cardText} font-bold`}>{buttonCall.tableName}</span>
+              {buttonCall.type === ButtonCallTypeEnum.GAMEMASTERCALL && (
+                <span className={`${sizes.assigneeText} mt-3 font-semibold text-center leading-tight`}>
+                  {buttonCall.assignedToName ?? "—"}
+                </span>
+              )}
             </div>
           ))}
         </div>

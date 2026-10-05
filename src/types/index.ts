@@ -14,6 +14,7 @@ export enum ButtonCallActionEnum {
   CREATE = "create",
   RECALL = "recall",
   CLOSE = "close",
+  ASSIGN = "assign",
 }
 
 export interface ScreenImage {
@@ -62,6 +63,8 @@ export type ButtonCall = {
   cancelledByName?: string;
   gmCallReason?: GmCallReasonEnum;
   game?: number;
+  assignedTo?: string;
+  assignedToName?: string;
   duration?: number;
   callCount: number;
 };
