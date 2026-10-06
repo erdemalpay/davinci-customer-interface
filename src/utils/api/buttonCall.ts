@@ -3,9 +3,9 @@ import { toast } from "react-toastify";
 import { post } from ".";
 import {
   ButtonCall,
-  ButtonCallType,
   CloseButtonCallInput,
   FormElementsState,
+  ScreenButtonCall,
 } from "../../types";
 import { Paths, useGet, useGetList, useMutationApi } from "./factory";
 
@@ -88,14 +88,12 @@ export function useGetQueue(location: number, tableName: string) {
   );
 }
 
-export function useGetActiveButtonCalls(
-  location: number,
-  type = ButtonCallType.ACTIVE
-) {
-  const today = new Date().toISOString().split("T")[0];
-  return useGetList<ButtonCall>(
-    `${Paths.ButtonCalls}?location=${location}&date=${today}&type=${type}`,
-    [`${Paths.ButtonCalls}`, location, today, type],
+// Today's active calls of a location for the cafe TV screen, with only the
+// fields customers may see.
+export function useGetScreenButtonCalls(location: number) {
+  return useGetList<ScreenButtonCall>(
+    `${Paths.ButtonCalls}/screen?location=${location}`,
+    [`${Paths.ButtonCalls}`, "screen", location],
     true,
     ACTIVE_CALLS_REFETCH_INTERVAL
   );

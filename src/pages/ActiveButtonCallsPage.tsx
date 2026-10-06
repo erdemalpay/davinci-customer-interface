@@ -4,9 +4,9 @@ import { MdOutlineRestaurantMenu, MdOutlineRoomService } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { ScreenImageSlideshow } from "../components/ScreenImageSlideshow";
 import { useWebSocket } from "../hooks/useWebSocket";
-import { ButtonCall, ButtonCallTypeEnum } from "../types";
+import { ButtonCallTypeEnum, ScreenButtonCall } from "../types";
 import { useGetScreenImages } from "../utils/api/asset";
-import { useGetActiveButtonCalls } from "../utils/api/buttonCall";
+import { useGetScreenButtonCalls } from "../utils/api/buttonCall";
 import logoUrl from "../assets/images/logo.png";
 
 export default function ActiveButtonCallsPage() {
@@ -14,33 +14,22 @@ export default function ActiveButtonCallsPage() {
   const selectedLocationId = Number(location);
   const { isAudioBlocked } = useWebSocket(selectedLocationId);
 
-  const buttonCalls = useGetActiveButtonCalls(selectedLocationId);
+  // Already limited to today's active calls of this location.
+  const activeButtonCalls = useGetScreenButtonCalls(selectedLocationId);
   const screenImages = useGetScreenImages();
-
-  const activeButtonCalls = buttonCalls?.reduce(
-    (acc: { active: ButtonCall[] }, buttonCall: ButtonCall) => {
-      if (
-        buttonCall?.location == selectedLocationId &&
-        !buttonCall?.finishHour
-      ) {
-        acc.active.push(buttonCall);
-      }
-      return acc;
-    },
-    { active: [] },
-  ).active;
 
   const groupedCalls = {
     gameMasterAndTable: activeButtonCalls.filter(
-      (call: ButtonCall) =>
+      (call: ScreenButtonCall) =>
         call.type === ButtonCallTypeEnum.GAMEMASTERCALL ||
         call.type === ButtonCallTypeEnum.TABLECALL,
     ),
     order: activeButtonCalls.filter(
-      (call: ButtonCall) => call.type === ButtonCallTypeEnum.ORDERCALL,
+      (call: ScreenButtonCall) => call.type === ButtonCallTypeEnum.ORDERCALL,
     ),
     orderReady: activeButtonCalls.filter(
-      (call: ButtonCall) => call.type === ButtonCallTypeEnum.ORDERREADYCALL,
+      (call: ScreenButtonCall) =>
+        call.type === ButtonCallTypeEnum.ORDERREADYCALL,
     ),
   };
 
@@ -98,14 +87,14 @@ export default function ActiveButtonCallsPage() {
     </div>
   ) : null;
 
-  const renderCallGroup = (calls: ButtonCall[], type: ButtonCallTypeEnum) => {
+  const renderCallGroup = (calls: ScreenButtonCall[], type: ButtonCallTypeEnum) => {
     if (calls.length === 0) return null;
 
     return (
       <div className={`flex items-center gap-8 ${sizes.mbGroup}`}>
         <div className={`text-davinci-black/50 flex-shrink-0 ${sizes.iconSize}`}>{getIcon(type)}</div>
         <div className={`flex flex-wrap ${sizes.gap}`}>
-          {calls.map((buttonCall: ButtonCall) => (
+          {calls.map((buttonCall: ScreenButtonCall) => (
             <div
               key={buttonCall._id}
               className={`${getBackgroundColor(buttonCall.type)} relative text-white ${sizes.cardPadding} rounded-3xl shadow-xl transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${sizes.cardSize}`}

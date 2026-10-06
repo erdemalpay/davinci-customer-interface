@@ -64,9 +64,16 @@ export type ButtonCall = {
   gmCallReason?: GmCallReasonEnum;
   game?: number;
   assignedTo?: string;
-  assignedToName?: string;
   duration?: number;
   callCount: number;
+};
+// What the public cafe TV screen gets for an active call.
+export type ScreenButtonCall = {
+  _id: number;
+  tableName: string;
+  type: ButtonCallTypeEnum;
+  startHour: string;
+  assignedToName?: string;
 };
 export interface SocketEventType {
   event: string;
