@@ -119,7 +119,9 @@ export function GameMasterCallModal({
                 ? t("gamemaster.chooseGame")
                 : step === "declined"
                   ? t("gamemaster.declined.title")
-                  : t("gamemaster.unmet.title")}
+                  : availability?.status === GameAvailabilityStatus.UNAVAILABLE
+                    ? t("gamemaster.unmet.titleToday")
+                    : t("gamemaster.unmet.title")}
           </h3>
           <button
             onClick={onClose}
