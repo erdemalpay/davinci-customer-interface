@@ -97,14 +97,7 @@ export function useWebSocket(soundLocation?: number) {
 
     socket.on("buttonCallChanged", (payload?: ButtonCallChangedPayload) => {
       if (soundLocation === undefined || !payload?.type) return;
-      // Only new calls and repeated calls ring; closing, assigning, declining
-      // or taking over a call must not replay the sound.
-      if (
-        payload.action !== ButtonCallActionEnum.CREATE &&
-        payload.action !== ButtonCallActionEnum.RECALL
-      ) {
-        return;
-      }
+      if (payload.action === ButtonCallActionEnum.CLOSE) return;
       if (payload.location !== soundLocation) return;
 
       const audio = audiosRef.current[payload.type];

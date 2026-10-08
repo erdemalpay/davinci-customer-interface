@@ -8,30 +8,7 @@
     "title": "Oyun Yardımı",
     "description": "Oyun kuralları için yardım isteyin",
     "button": "Game Master Çağır",
-    "calling": "Çağrılıyor...",
-    "chooseReason": "Nasıl yardımcı olalım?",
-    "chooseGame": "Hangi oyun?",
-    "searchGame": "Oyun ara",
-    "noGameFound": "Oyun bulunamadı",
-    "reasons": {
-      "recommendation": "Oyun tavsiyesi istiyorum",
-      "explanation": "Oyun anlatımı istiyorum",
-      "question": "Oynadığım oyunla ilgili bir sorum var"
-    },
-    "unmet": {
-      "title": "Bu oyun için şu an müsait kimse yok",
-      "titleToday": "Bugün bu oyunu anlatabilecek kimse yok",
-      "busy": "Şu anda bu oyunu bilen arkadaşlarımız meşgul. Dilerseniz sıraya girebilirsiniz, müsait olur olmaz size gelecekler. Dilerseniz başka bir oyun seçebilirsiniz.",
-      "later": "Bu oyunu bilen arkadaşımız saat {{hour}} itibarıyla kafede olacak. Dilerseniz sıraya girebilir, dilerseniz başka bir oyun seçebilirsiniz.",
-      "unavailable": "Maalesef bugün kafede bu oyunu bilen kimse yok. Başka bir oyun seçmek ister misiniz?",
-      "wait": "Sıraya gir",
-      "pickAnotherGame": "Başka oyun seç"
-    },
-    "declined": {
-      "title": "Bu oyunu şu an anlatamıyoruz",
-      "message": "Bu oyunu bilen arkadaşımız şu an gelemiyor. Başka bir oyun seçmek ister misiniz?",
-      "cancelCall": "Çağrıyı iptal et"
-    }
+    "calling": "Çağrılıyor..."
   },
   "service": {
     "title": "Sipariş",
@@ -72,7 +49,5 @@
     "noWait": "Bekleyen masa yok",
     "yourTurn": "Sıra sizde!"
   },
-  "cancel": "İptal",
-  "back": "Geri",
-  "close": "Kapat"
+  "cancel": "İptal"
 }
