@@ -4,11 +4,16 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Button } from "./components/Button";
 import { FeedbackModal } from "./components/FeedbackModal";
+import { GameMasterCallModal } from "./components/GameMasterCallModal";
 import { GenericCard } from "./components/GenericCard";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { useWebSocket } from "./hooks/useWebSocket";
-import { ButtonCallTypeEnum, LocationEnum } from "./types";
-import { useButtonCallMutations, useGetQueue } from "./utils/api/buttonCall";
+import { ButtonCallTypeEnum, GmCallReasonEnum, LocationEnum } from "./types";
+import {
+  changeGmCallRequest,
+  useButtonCallMutations,
+  useGetQueue,
+} from "./utils/api/buttonCall";
 import { useFeedbackMutations } from "./utils/api/feedback";
 import { getOrdinal } from "./utils/ordinal";
 import { decodeTableUrl } from "./utils/qrEncoding";
@@ -25,6 +30,10 @@ function App() {
 
   const [activeRequest, setActiveRequest] = useState<string | null>(null);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [showGameMasterModal, setShowGameMasterModal] = useState(false);
+  // Call whose "nobody can explain this game" offer the table closed.
+  const [dismissedDeclinedCallId, setDismissedDeclinedCallId] =
+    useState<number>();
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const { createFeedback } = useFeedbackMutations();
   const { createButtonCall, closeButtonCallFromPanel } = useButtonCallMutations();
@@ -75,12 +84,21 @@ function App() {
 
   const locationName = getLocationName(Number(location));
 
+  // The table first picks why it needs a game master; the reason (and the
+  // game for an explanation) decides who gets assigned.
   const handleGameMasterCall = () => {
+    setShowGameMasterModal(true);
+  };
+
+  const submitGameMasterCall = (reason: GmCallReasonEnum, game?: number) => {
+    setShowGameMasterModal(false);
     setActiveRequest("gamemaster");
     createButtonCall({
       location: Number(location),
       type: ButtonCallTypeEnum.GAMEMASTERCALL,
       tableName: tableName,
+      gmCallReason: reason,
+      ...(game !== undefined && { game }),
       hour: new Date().toLocaleTimeString("tr-TR", {
         hour: "2-digit",
         minute: "2-digit",
@@ -142,6 +160,24 @@ function App() {
 
   const gameMasterQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
   const serviceQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
+
+  // Everyone who knows the requested game declined: offer another game.
+  const declinedCallId =
+    gameMasterQueue?.explainerUnavailable &&
+    gameMasterQueue.callId !== dismissedDeclinedCallId
+      ? gameMasterQueue.callId
+      : undefined;
+
+  const changeGameMasterRequest = (reason: GmCallReasonEnum, game?: number) => {
+    if (declinedCallId === undefined) return;
+    setDismissedDeclinedCallId(declinedCallId);
+    changeGmCallRequest(declinedCallId, {
+      location: Number(location),
+      tableName,
+      gmCallReason: reason,
+      ...(game !== undefined && { game }),
+    }).catch((error) => console.error("Error changing call:", error));
+  };
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: "#F7F3ED" }}>
@@ -318,6 +354,30 @@ function App() {
           </div>
         </div>
       </div>
+
+      {showGameMasterModal && (
+        <GameMasterCallModal
+          location={Number(location)}
+          tableName={tableName}
+          onClose={() => setShowGameMasterModal(false)}
+          onSubmit={submitGameMasterCall}
+        />
+      )}
+
+      {declinedCallId !== undefined && !showGameMasterModal && (
+        <GameMasterCallModal
+          key={declinedCallId}
+          location={Number(location)}
+          tableName={tableName}
+          explainerDeclined
+          onClose={() => setDismissedDeclinedCallId(declinedCallId)}
+          onSubmit={changeGameMasterRequest}
+          onCancelCall={() => {
+            setDismissedDeclinedCallId(declinedCallId);
+            handleCancelRequest("gamemaster");
+          }}
+        />
+      )}
 
       <FeedbackModal
         isOpen={showFeedbackForm}

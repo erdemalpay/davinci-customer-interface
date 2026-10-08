@@ -14,6 +14,7 @@ export enum ButtonCallActionEnum {
   CREATE = "create",
   RECALL = "recall",
   CLOSE = "close",
+  ASSIGN = "assign",
 }
 
 export interface ScreenImage {
@@ -39,6 +40,15 @@ export type Feedback = {
   table: number;
   createdAt: Date;
 };
+export enum GmCallReasonEnum {
+  RECOMMENDATION = "RECOMMENDATION",
+  EXPLANATION = "EXPLANATION",
+  QUESTION = "QUESTION",
+}
+export type MinimalGame = {
+  _id: number;
+  name: string;
+};
 export type ButtonCall = {
   _id: string;
   tableName: string;
@@ -51,8 +61,19 @@ export type ButtonCall = {
   createdBy?: string;
   cancelledBy?: string;
   cancelledByName?: string;
+  gmCallReason?: GmCallReasonEnum;
+  game?: number;
+  assignedTo?: string;
   duration?: number;
   callCount: number;
+};
+// What the public cafe TV screen gets for an active call.
+export type ScreenButtonCall = {
+  _id: number;
+  tableName: string;
+  type: ButtonCallTypeEnum;
+  startHour: string;
+  assignedToName?: string;
 };
 export interface SocketEventType {
   event: string;
