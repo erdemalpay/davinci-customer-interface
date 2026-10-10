@@ -6,6 +6,7 @@ import {
   GameAvailability,
   GameAvailabilityStatus,
   checkGameAvailability,
+  getTableGame,
   useGetGamesMinimal,
 } from "../utils/api/game";
 
@@ -22,7 +23,7 @@ interface GameMasterCallModalProps {
   onCancelCall?: () => void;
 }
 
-type Step = "reason" | "game" | "unmet" | "declined";
+type Step = "reason" | "game" | "unmet" | "declined" | "questionGame";
 
 // Mounted only while open, so the game list is fetched on demand.
 export function GameMasterCallModal({
@@ -40,10 +41,20 @@ export function GameMasterCallModal({
   const [selectedGame, setSelectedGame] = useState<number>();
   const [availability, setAvailability] = useState<GameAvailability>();
   const [isChecking, setIsChecking] = useState(false);
+  // A question: the game it's about. The table confirms its current game or
+  // picks the one it plays.
+  const [isQuestion, setIsQuestion] = useState(false);
+  const [tableGame, setTableGame] = useState<number>();
+  const games = useGetGamesMinimal();
+  const tableGameName = games.find((g) => g._id === tableGame)?.name;
 
   // Before calling for an explanation, check whether someone who knows the
   // game is free; otherwise let the table wait in line or pick another game.
   const handleGameSelect = async (game: number) => {
+    if (isQuestion) {
+      onSubmit(GmCallReasonEnum.QUESTION, game);
+      return;
+    }
     setIsChecking(true);
     try {
       const result = await checkGameAvailability({ location, tableName, game });
@@ -81,12 +92,43 @@ export function GameMasterCallModal({
     },
   ];
 
+  const handleQuestion = async () => {
+    setIsChecking(true);
+    setIsQuestion(true);
+    try {
+      const { game } = await getTableGame(location, tableName);
+      if (game) {
+        setTableGame(game);
+        setStep("questionGame");
+        return;
+      }
+      setStep("game");
+    } catch {
+      // Still call; the game master asks which game.
+      onSubmit(GmCallReasonEnum.QUESTION);
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
   const handleReason = (reason: GmCallReasonEnum) => {
     if (reason === GmCallReasonEnum.EXPLANATION) {
+      setIsQuestion(false);
       setStep("game");
       return;
     }
+    if (reason === GmCallReasonEnum.QUESTION) {
+      handleQuestion();
+      return;
+    }
     onSubmit(reason);
+  };
+
+  const goBack = () => {
+    if (step === "unmet") setStep("game");
+    else if (step === "game" && isQuestion && tableGame)
+      setStep("questionGame");
+    else setStep(firstStep);
   };
 
   return (
@@ -103,7 +145,7 @@ export function GameMasterCallModal({
         <div className="flex items-center justify-between mb-5 gap-2">
           {step !== firstStep ? (
             <button
-              onClick={() => setStep(step === "unmet" ? "game" : firstStep)}
+              onClick={goBack}
               aria-label={t("back")}
               className="p-1 -ml-1 text-davinci-black/70 hover:text-davinci-black"
             >
@@ -115,13 +157,18 @@ export function GameMasterCallModal({
           <h3 className="text-xl md:text-2xl font-body font-bold text-davinci-black text-center flex-1">
             {step === "reason"
               ? t("gamemaster.chooseReason")
-              : step === "game"
-                ? t("gamemaster.chooseGame")
-                : step === "declined"
-                  ? t("gamemaster.declined.title")
-                  : availability?.status === GameAvailabilityStatus.UNAVAILABLE
-                    ? t("gamemaster.unmet.titleToday")
-                    : t("gamemaster.unmet.title")}
+              : step === "questionGame"
+                ? t("gamemaster.question.title")
+                : step === "game"
+                  ? isQuestion
+                    ? t("gamemaster.question.chooseGame")
+                    : t("gamemaster.chooseGame")
+                  : step === "declined"
+                    ? t("gamemaster.declined.title")
+                    : availability?.status ===
+                        GameAvailabilityStatus.UNAVAILABLE
+                      ? t("gamemaster.unmet.titleToday")
+                      : t("gamemaster.unmet.title")}
           </h3>
           <button
             onClick={onClose}
@@ -159,13 +206,35 @@ export function GameMasterCallModal({
               </button>
             )}
           </div>
+        ) : step === "questionGame" ? (
+          <div className="flex flex-col gap-3">
+            <p className="font-body text-davinci-black/80 text-center mb-2">
+              {t("gamemaster.question.message", {
+                game: tableGameName ?? "",
+              })}
+            </p>
+            <button
+              onClick={() => onSubmit(GmCallReasonEnum.QUESTION, tableGame)}
+              className="w-full rounded-xl px-4 py-4 font-body font-semibold text-white transition-transform active:scale-[0.98]"
+              style={{ background: "#1F2937" }}
+            >
+              {t("gamemaster.question.yes", { game: tableGameName ?? "" })}
+            </button>
+            <button
+              onClick={() => setStep("game")}
+              className="w-full rounded-xl px-4 py-4 font-body font-semibold border border-davinci-black/30 text-davinci-black transition-transform active:scale-[0.98]"
+            >
+              {t("gamemaster.question.otherGame")}
+            </button>
+          </div>
         ) : step === "reason" ? (
           <div className="flex flex-col gap-3">
             {reasons.map(({ reason, icon: Icon, label }) => (
               <button
                 key={reason}
                 onClick={() => handleReason(reason)}
-                className="flex items-center gap-3 w-full rounded-xl px-4 py-4 text-left font-body font-semibold text-white transition-transform active:scale-[0.98]"
+                disabled={isChecking}
+                className="flex items-center gap-3 w-full rounded-xl px-4 py-4 text-left font-body font-semibold text-white transition-transform active:scale-[0.98] disabled:opacity-60"
                 style={{ background: "#1F2937" }}
               >
                 <Icon className="w-6 h-6 shrink-0" />
@@ -207,12 +276,14 @@ function UnmetRequestChoice({
   onAskRecommendation: () => void;
 }) {
   const { t } = useTranslation();
-  const canWait = availability.status !== GameAvailabilityStatus.UNAVAILABLE;
+  // Only when someone who knows the game is in the cafe but busy. Someone
+  // arriving later isn't mentioned: for the table nobody knows it right now.
+  const canWait = availability.status === GameAvailabilityStatus.BUSY;
   const message =
     availability.status === GameAvailabilityStatus.BUSY
       ? t("gamemaster.unmet.busy")
       : availability.status === GameAvailabilityStatus.LATER
-        ? t("gamemaster.unmet.later", { hour: availability.availableFrom })
+        ? t("gamemaster.unmet.later")
         : t("gamemaster.unmet.unavailable");
 
   const buttonClass =

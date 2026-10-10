@@ -22,7 +22,7 @@
       "title": "This game isn't available right now",
       "titleToday": "Nobody can explain this game today",
       "busy": "Everyone who knows this game is busy at the moment. You can wait in line and they'll come to you as soon as they're free, or pick another game.",
-      "later": "Someone who knows this game will be in the cafe from {{hour}}. You can wait in line or pick another game.",
+      "later": "Nobody in the cafe knows this game right now. You can pick another game or ask for a recommendation.",
       "unavailable": "Unfortunately nobody who knows this game is in the cafe today. Would you like to pick another game?",
       "wait": "Wait in line",
       "pickAnotherGame": "Pick another game"
@@ -31,6 +31,13 @@
       "title": "We can't explain this game right now",
       "message": "The friend who knows this game can't make it at the moment. Would you like to pick another game?",
       "cancelCall": "Cancel the call"
+    },
+    "question": {
+      "title": "Which game is it about?",
+      "message": "You're playing {{game}}. Is your question about this game?",
+      "yes": "Yes, {{game}}",
+      "otherGame": "No, we're playing a different game",
+      "chooseGame": "Which game are you playing?"
     }
   },
   "service": {
