@@ -1,5 +1,5 @@
 import { MinimalGame } from "../../types";
-import { post } from ".";
+import { get, post } from ".";
 import { Paths, useGetList } from "./factory";
 
 export function useGetGamesMinimal() {
@@ -28,5 +28,17 @@ export function checkGameAvailability(payload: {
   return post<typeof payload, GameAvailability>({
     path: `${Paths.ButtonCalls}/game-availability`,
     payload,
+  });
+}
+
+// The game the table is playing now (null when none), so a question can be
+// about it.
+export function getTableGame(location: number, tableName: string) {
+  const query = new URLSearchParams({
+    location: String(location),
+    tableName,
+  });
+  return get<{ game: number | null }>({
+    path: `${Paths.ButtonCalls}/table-game?${query.toString()}`,
   });
 }

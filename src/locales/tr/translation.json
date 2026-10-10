@@ -22,7 +22,7 @@
       "title": "Bu oyun için şu an müsait kimse yok",
       "titleToday": "Bugün bu oyunu anlatabilecek kimse yok",
       "busy": "Şu anda bu oyunu bilen arkadaşlarımız meşgul. Dilerseniz sıraya girebilirsiniz, müsait olur olmaz size gelecekler. Dilerseniz başka bir oyun seçebilirsiniz.",
-      "later": "Bu oyunu bilen arkadaşımız saat {{hour}} itibarıyla kafede olacak. Dilerseniz sıraya girebilir, dilerseniz başka bir oyun seçebilirsiniz.",
+      "later": "Şu an kafede bu oyunu bilen kimse yok. Başka bir oyun seçebilir ya da oyun tavsiyesi isteyebilirsiniz.",
       "unavailable": "Maalesef bugün kafede bu oyunu bilen kimse yok. Başka bir oyun seçmek ister misiniz?",
       "wait": "Sıraya gir",
       "pickAnotherGame": "Başka oyun seç"
@@ -31,6 +31,13 @@
       "title": "Bu oyunu şu an anlatamıyoruz",
       "message": "Bu oyunu bilen arkadaşımız şu an gelemiyor. Başka bir oyun seçmek ister misiniz?",
       "cancelCall": "Çağrıyı iptal et"
+    },
+    "question": {
+      "title": "Hangi oyunla ilgili?",
+      "message": "Şu an {{game}} oynuyorsunuz. Sorunuz bu oyunla mı ilgili?",
+      "yes": "Evet, {{game}}",
+      "otherGame": "Hayır, farklı bir oyun oynuyoruz",
+      "chooseGame": "Hangi oyunu oynuyorsunuz?"
     }
   },
   "service": {
