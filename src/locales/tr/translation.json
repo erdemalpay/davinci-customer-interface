@@ -8,7 +8,37 @@
     "title": "Oyun Yardımı",
     "description": "Oyun kuralları için yardım isteyin",
     "button": "Game Master Çağır",
-    "calling": "Çağrılıyor..."
+    "calling": "Çağrılıyor...",
+    "chooseReason": "Nasıl yardımcı olalım?",
+    "chooseGame": "Hangi oyun?",
+    "searchGame": "Oyun ara",
+    "noGameFound": "Oyun bulunamadı",
+    "reasons": {
+      "recommendation": "Oyun tavsiyesi istiyorum",
+      "explanation": "Oyun anlatımı istiyorum",
+      "question": "Oynadığım oyunla ilgili bir sorum var"
+    },
+    "unmet": {
+      "title": "Bu oyun için şu an müsait kimse yok",
+      "titleToday": "Bugün bu oyunu anlatabilecek kimse yok",
+      "busy": "Şu anda bu oyunu bilen arkadaşlarımız meşgul. Dilerseniz sıraya girebilirsiniz, müsait olur olmaz size gelecekler. Dilerseniz başka bir oyun seçebilirsiniz.",
+      "later": "Şu an kafede bu oyunu bilen kimse yok. Başka bir oyun seçebilir ya da oyun tavsiyesi isteyebilirsiniz.",
+      "unavailable": "Maalesef bugün kafede bu oyunu bilen kimse yok. Başka bir oyun seçmek ister misiniz?",
+      "wait": "Sıraya gir",
+      "pickAnotherGame": "Başka oyun seç"
+    },
+    "declined": {
+      "title": "Bu oyunu şu an anlatamıyoruz",
+      "message": "Bu oyunu bilen arkadaşımız şu an gelemiyor. Başka bir oyun seçmek ister misiniz?",
+      "cancelCall": "Çağrıyı iptal et"
+    },
+    "question": {
+      "title": "Hangi oyunla ilgili?",
+      "message": "Şu an {{game}} oynuyorsunuz. Sorunuz bu oyunla mı ilgili?",
+      "yes": "Evet, {{game}}",
+      "otherGame": "Hayır, farklı bir oyun oynuyoruz",
+      "chooseGame": "Hangi oyunu oynuyorsunuz?"
+    }
   },
   "service": {
     "title": "Sipariş",
@@ -47,7 +77,10 @@
   "queue": {
     "waitingCount": "{{count}} sıradasınız..",
     "noWait": "Bekleyen masa yok",
-    "yourTurn": "Sıra sizde!"
+    "assigned": "{{name}} birazdan sizinle ilgilenecek",
+    "soon": "En kısa sürede sizinle ilgileneceğiz"
   },
-  "cancel": "İptal"
+  "cancel": "İptal",
+  "back": "Geri",
+  "close": "Kapat"
 }
