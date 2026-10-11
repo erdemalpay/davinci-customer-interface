@@ -39,6 +39,8 @@ export interface QueuePayload {
   callId?: number;
   // Everyone who knows the requested game declined the call.
   explainerUnavailable?: boolean;
+  // First name of whoever is coming to the table.
+  assignedToName?: string;
 }
 export type QueueResponse = Record<string, QueuePayload>;
 
