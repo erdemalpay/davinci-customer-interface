@@ -11,6 +11,7 @@ import { useWebSocket } from "./hooks/useWebSocket";
 import { ButtonCallTypeEnum, GmCallReasonEnum, LocationEnum } from "./types";
 import {
   changeGmCallRequest,
+  QueuePayload,
   useButtonCallMutations,
   useGetQueue,
 } from "./utils/api/buttonCall";
@@ -158,6 +159,12 @@ function App() {
     }, 2000);
   };
 
+  // Who is coming when someone took the call, otherwise "as soon as we can".
+  const queueStatusText = (entry: QueuePayload) =>
+    entry.assignedToName
+      ? t("queue.assigned", { name: entry.assignedToName })
+      : t("queue.soon");
+
   const gameMasterQueue = queue?.[ButtonCallTypeEnum.GAMEMASTERCALL];
   const serviceQueue = queue?.[ButtonCallTypeEnum.ORDERCALL];
 
@@ -257,9 +264,10 @@ function App() {
             onCancelClick={() => handleCancelRequest("gamemaster")}
             cancelButtonText={t("cancel")}
           >
-            {gameMasterQueue?.isQueued && gameMasterQueue.position === 1 ? (
+            {gameMasterQueue?.isQueued &&
+            (gameMasterQueue.assignedToName || gameMasterQueue.position === 1) ? (
               <div className="mb-2 text-base font-body font-semibold text-white md:text-davinci-red animate-gentle-bounce">
-                {t("queue.yourTurn")}
+                {queueStatusText(gameMasterQueue)}
               </div>
             ) : gameMasterQueue?.waitingCount && gameMasterQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base font-body font-semibold text-white/80 md:text-davinci-black-deep animate-gentle-bounce">
@@ -297,9 +305,10 @@ function App() {
             onCancelClick={() => handleCancelRequest("service")}
             cancelButtonText={t("cancel")}
           >
-            {serviceQueue?.isQueued && serviceQueue.position === 1 ? (
+            {serviceQueue?.isQueued &&
+            (serviceQueue.assignedToName || serviceQueue.position === 1) ? (
               <div className="mb-2 text-base font-body font-semibold text-white md:text-davinci-red animate-gentle-bounce">
-                {t("queue.yourTurn")}
+                {queueStatusText(serviceQueue)}
               </div>
             ) : serviceQueue?.waitingCount && serviceQueue.waitingCount > 0 ? (
               <div className="mb-2 text-base font-body font-semibold text-white/80 md:text-davinci-black-deep animate-gentle-bounce">

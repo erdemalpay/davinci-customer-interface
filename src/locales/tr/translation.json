@@ -77,7 +77,8 @@
   "queue": {
     "waitingCount": "{{count}} sıradasınız..",
     "noWait": "Bekleyen masa yok",
-    "yourTurn": "Sıra sizde!"
+    "assigned": "{{name}} birazdan sizinle ilgilenecek",
+    "soon": "En kısa sürede sizinle ilgileneceğiz"
   },
   "cancel": "İptal",
   "back": "Geri",
