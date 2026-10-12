@@ -37,7 +37,8 @@
       "message": "You're playing {{game}}. Is your question about this game?",
       "yes": "Yes, {{game}}",
       "otherGame": "No, we're playing a different game",
-      "chooseGame": "Which game are you playing?"
+      "chooseGame": "Which game are you playing?",
+      "nobody": "Nobody can help with this game right now"
     }
   },
   "service": {

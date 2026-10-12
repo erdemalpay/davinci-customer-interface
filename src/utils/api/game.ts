@@ -1,4 +1,4 @@
-import { MinimalGame } from "../../types";
+import { GmCallReasonEnum, MinimalGame } from "../../types";
 import { get, post } from ".";
 import { Paths, useGetList } from "./factory";
 
@@ -24,6 +24,8 @@ export function checkGameAvailability(payload: {
   location: number;
   tableName: string;
   game: number;
+  // Explanation (default) or a question about the game.
+  gmCallReason?: GmCallReasonEnum;
 }) {
   return post<typeof payload, GameAvailability>({
     path: `${Paths.ButtonCalls}/game-availability`,

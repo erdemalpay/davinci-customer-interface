@@ -37,7 +37,8 @@
       "message": "Şu an {{game}} oynuyorsunuz. Sorunuz bu oyunla mı ilgili?",
       "yes": "Evet, {{game}}",
       "otherGame": "Hayır, farklı bir oyun oynuyoruz",
-      "chooseGame": "Hangi oyunu oynuyorsunuz?"
+      "chooseGame": "Hangi oyunu oynuyorsunuz?",
+      "nobody": "Şu an bu oyuna yardımcı olabilecek biri yok"
     }
   },
   "service": {
