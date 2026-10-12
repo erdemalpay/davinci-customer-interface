@@ -108,6 +108,11 @@ export default function ActiveButtonCallsPage() {
                   {buttonCall.assignedToName ?? "—"}
                 </span>
               )}
+              {buttonCall.gameName && (
+                <span className={`${sizes.assigneeText} mt-2 text-center leading-tight opacity-90 line-clamp-2`}>
+                  {buttonCall.gameName}
+                </span>
+              )}
             </div>
           ))}
         </div>
