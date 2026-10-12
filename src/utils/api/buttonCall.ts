@@ -6,6 +6,7 @@ import {
   CloseButtonCallInput,
   FormElementsState,
   ScreenButtonCall,
+  GmCallReasonEnum,
 } from "../../types";
 import { Paths, useGet, useGetList, useMutationApi } from "./factory";
 
@@ -41,6 +42,8 @@ export interface QueuePayload {
   explainerUnavailable?: boolean;
   // First name of whoever is coming to the table.
   assignedToName?: string;
+  // What the table's game master call is for.
+  gmCallReason?: GmCallReasonEnum;
 }
 export type QueueResponse = Record<string, QueuePayload>;
 

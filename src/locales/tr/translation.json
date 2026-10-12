@@ -38,7 +38,11 @@
       "yes": "Evet, {{game}}",
       "otherGame": "Hayır, farklı bir oyun oynuyoruz",
       "chooseGame": "Hangi oyunu oynuyorsunuz?",
-      "nobody": "Şu an bu oyuna yardımcı olabilecek biri yok"
+      "nobody": "Şu an bu oyuna yardımcı olabilecek biri yok",
+      "busy": "Şu anda bu oyunu bilen arkadaşlarımız meşgul. Dilerseniz sıraya girebilirsiniz, müsait olur olmaz size gelecekler.",
+      "unavailable": "Maalesef şu an kafede bu oyunu bilen kimse yok.",
+      "declined": "Bu oyunu bilen arkadaşlarımız şu an gelemiyor. Dilerseniz beklemeye devam edebilir ya da çağrıyı iptal edebilirsiniz.",
+      "keepWaiting": "Beklemeye devam et"
     }
   },
   "service": {

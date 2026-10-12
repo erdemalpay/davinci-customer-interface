@@ -20,6 +20,8 @@ interface GameMasterCallModalProps {
   // Everyone who knows the requested game declined the table's call: start
   // by offering another game instead of asking for a reason.
   explainerDeclined?: boolean;
+  // What the declined call was for (a question has no other game to pick).
+  declinedReason?: GmCallReasonEnum;
   onCancelCall?: () => void;
 }
 
@@ -32,6 +34,7 @@ export function GameMasterCallModal({
   onClose,
   onSubmit,
   explainerDeclined = false,
+  declinedReason,
   onCancelCall,
 }: GameMasterCallModalProps): JSX.Element {
   const { t } = useTranslation();
@@ -172,7 +175,9 @@ export function GameMasterCallModal({
                     ? t("gamemaster.question.chooseGame")
                     : t("gamemaster.chooseGame")
                   : step === "declined"
-                    ? t("gamemaster.declined.title")
+                    ? declinedReason === GmCallReasonEnum.QUESTION
+                      ? t("gamemaster.question.nobody")
+                      : t("gamemaster.declined.title")
                     : isQuestion
                       ? t("gamemaster.question.nobody")
                       : availability?.status ===
@@ -189,7 +194,28 @@ export function GameMasterCallModal({
           </button>
         </div>
 
-        {step === "declined" ? (
+        {step === "declined" && declinedReason === GmCallReasonEnum.QUESTION ? (
+          <div className="flex flex-col gap-3">
+            <p className="font-body text-davinci-black/80 text-center mb-2">
+              {t("gamemaster.question.declined")}
+            </p>
+            <button
+              onClick={onClose}
+              className="w-full rounded-xl px-4 py-4 font-body font-semibold text-white transition-transform active:scale-[0.98]"
+              style={{ background: "#1F2937" }}
+            >
+              {t("gamemaster.question.keepWaiting")}
+            </button>
+            {onCancelCall && (
+              <button
+                onClick={onCancelCall}
+                className="w-full rounded-xl px-4 py-3 font-body text-davinci-black/70 underline"
+              >
+                {t("gamemaster.declined.cancelCall")}
+              </button>
+            )}
+          </div>
+        ) : step === "declined" ? (
           <div className="flex flex-col gap-3">
             <p className="font-body text-davinci-black/80 text-center mb-2">
               {t("gamemaster.declined.message")}
@@ -263,6 +289,8 @@ export function GameMasterCallModal({
         ) : (
           <UnmetRequestChoice
             availability={availability!}
+            isQuestion={isQuestion}
+            onClose={onClose}
             onWait={() =>
               onSubmit(
                 isQuestion
@@ -284,21 +312,29 @@ export function GameMasterCallModal({
 
 function UnmetRequestChoice({
   availability,
+  isQuestion,
   onWait,
   onPickAnotherGame,
   onAskRecommendation,
+  onClose,
 }: {
   availability: GameAvailability;
+  // A question about the game the table plays: no other game to pick.
+  isQuestion: boolean;
   onWait: () => void;
   onPickAnotherGame: () => void;
   onAskRecommendation: () => void;
+  onClose: () => void;
 }) {
   const { t } = useTranslation();
   // Only when someone who knows the game is in the cafe but busy. Someone
   // arriving later isn't mentioned: for the table nobody knows it right now.
   const canWait = availability.status === GameAvailabilityStatus.BUSY;
-  const message =
-    availability.status === GameAvailabilityStatus.BUSY
+  const message = isQuestion
+    ? canWait
+      ? t("gamemaster.question.busy")
+      : t("gamemaster.question.unavailable")
+    : availability.status === GameAvailabilityStatus.BUSY
       ? t("gamemaster.unmet.busy")
       : availability.status === GameAvailabilityStatus.LATER
         ? t("gamemaster.unmet.later")
@@ -320,18 +356,32 @@ function UnmetRequestChoice({
           {t("gamemaster.unmet.wait")}
         </button>
       )}
-      <button
-        onClick={onPickAnotherGame}
-        className={`${buttonClass} ${
-          canWait
-            ? "border border-davinci-black/30 text-davinci-black"
-            : "text-white"
-        }`}
-        style={canWait ? undefined : { background: "#1F2937" }}
-      >
-        {t("gamemaster.unmet.pickAnotherGame")}
-      </button>
-      {!canWait && (
+      {isQuestion ? (
+        <button
+          onClick={onClose}
+          className={`${buttonClass} ${
+            canWait
+              ? "border border-davinci-black/30 text-davinci-black"
+              : "text-white"
+          }`}
+          style={canWait ? undefined : { background: "#1F2937" }}
+        >
+          {canWait ? t("cancel") : t("close")}
+        </button>
+      ) : (
+        <button
+          onClick={onPickAnotherGame}
+          className={`${buttonClass} ${
+            canWait
+              ? "border border-davinci-black/30 text-davinci-black"
+              : "text-white"
+          }`}
+          style={canWait ? undefined : { background: "#1F2937" }}
+        >
+          {t("gamemaster.unmet.pickAnotherGame")}
+        </button>
+      )}
+      {!canWait && !isQuestion && (
         <button
           onClick={onAskRecommendation}
           className={`${buttonClass} border border-davinci-black/30 text-davinci-black`}
