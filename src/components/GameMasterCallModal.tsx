@@ -48,18 +48,23 @@ export function GameMasterCallModal({
   const games = useGetGamesMinimal();
   const tableGameName = games.find((g) => g._id === tableGame)?.name;
 
-  // Before calling for an explanation, check whether someone who knows the
-  // game is free; otherwise let the table wait in line or pick another game.
+  // Before calling for an explanation or a question about a game, check
+  // whether someone who knows the game is free; otherwise let the table wait
+  // in line or pick another game.
   const handleGameSelect = async (game: number) => {
-    if (isQuestion) {
-      onSubmit(GmCallReasonEnum.QUESTION, game);
-      return;
-    }
+    const reason = isQuestion
+      ? GmCallReasonEnum.QUESTION
+      : GmCallReasonEnum.EXPLANATION;
     setIsChecking(true);
     try {
-      const result = await checkGameAvailability({ location, tableName, game });
+      const result = await checkGameAvailability({
+        location,
+        tableName,
+        game,
+        gmCallReason: reason,
+      });
       if (result.status === GameAvailabilityStatus.AVAILABLE) {
-        onSubmit(GmCallReasonEnum.EXPLANATION, game);
+        onSubmit(reason, game);
         return;
       }
       setSelectedGame(game);
@@ -68,7 +73,7 @@ export function GameMasterCallModal({
     } catch {
       // Still call; the API keeps the request waiting for someone who
       // knows the game.
-      onSubmit(GmCallReasonEnum.EXPLANATION, game);
+      onSubmit(reason, game);
     } finally {
       setIsChecking(false);
     }
@@ -125,7 +130,10 @@ export function GameMasterCallModal({
   };
 
   const goBack = () => {
-    if (step === "unmet") setStep("game");
+    if (step === "unmet")
+      setStep(
+        isQuestion && selectedGame === tableGame ? "questionGame" : "game",
+      );
     else if (step === "game" && isQuestion && tableGame)
       setStep("questionGame");
     else setStep(firstStep);
@@ -165,10 +173,12 @@ export function GameMasterCallModal({
                     : t("gamemaster.chooseGame")
                   : step === "declined"
                     ? t("gamemaster.declined.title")
-                    : availability?.status ===
-                        GameAvailabilityStatus.UNAVAILABLE
-                      ? t("gamemaster.unmet.titleToday")
-                      : t("gamemaster.unmet.title")}
+                    : isQuestion
+                      ? t("gamemaster.question.nobody")
+                      : availability?.status ===
+                          GameAvailabilityStatus.UNAVAILABLE
+                        ? t("gamemaster.unmet.titleToday")
+                        : t("gamemaster.unmet.title")}
           </h3>
           <button
             onClick={onClose}
@@ -214,7 +224,8 @@ export function GameMasterCallModal({
               })}
             </p>
             <button
-              onClick={() => onSubmit(GmCallReasonEnum.QUESTION, tableGame)}
+              onClick={() => tableGame && handleGameSelect(tableGame)}
+              disabled={isChecking}
               className="w-full rounded-xl px-4 py-4 font-body font-semibold text-white transition-transform active:scale-[0.98]"
               style={{ background: "#1F2937" }}
             >
@@ -252,7 +263,14 @@ export function GameMasterCallModal({
         ) : (
           <UnmetRequestChoice
             availability={availability!}
-            onWait={() => onSubmit(GmCallReasonEnum.EXPLANATION, selectedGame)}
+            onWait={() =>
+              onSubmit(
+                isQuestion
+                  ? GmCallReasonEnum.QUESTION
+                  : GmCallReasonEnum.EXPLANATION,
+                selectedGame,
+              )
+            }
             onPickAnotherGame={() => setStep("game")}
             onAskRecommendation={() =>
               onSubmit(GmCallReasonEnum.RECOMMENDATION)
