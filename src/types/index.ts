@@ -74,6 +74,8 @@ export type ScreenButtonCall = {
   type: ButtonCallTypeEnum;
   startHour: string;
   assignedToName?: string;
+  // The game the table asked about, if any.
+  gameName?: string;
 };
 export interface SocketEventType {
   event: string;
