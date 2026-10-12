@@ -101,7 +101,9 @@ export default function ActiveButtonCallsPage() {
               title={buttonCall.tableName}
             >
               <span className={`${sizes.cardText} font-bold`}>{buttonCall.tableName}</span>
-              {buttonCall.type === ButtonCallTypeEnum.GAMEMASTERCALL && (
+              {/* Game master and service calls are assigned to a person. */}
+              {(buttonCall.type === ButtonCallTypeEnum.GAMEMASTERCALL ||
+                buttonCall.type === ButtonCallTypeEnum.ORDERCALL) && (
                 <span className={`${sizes.assigneeText} mt-3 font-semibold text-center leading-tight`}>
                   {buttonCall.assignedToName ?? "—"}
                 </span>
