@@ -38,7 +38,11 @@
       "yes": "Yes, {{game}}",
       "otherGame": "No, we're playing a different game",
       "chooseGame": "Which game are you playing?",
-      "nobody": "Nobody can help with this game right now"
+      "nobody": "Nobody can help with this game right now",
+      "busy": "Everyone who knows this game is busy right now. You can wait in line; they'll come to you as soon as they're free.",
+      "unavailable": "Unfortunately nobody in the cafe knows this game right now.",
+      "declined": "Our staff who know this game can't come right now. You can keep waiting or cancel the call.",
+      "keepWaiting": "Keep waiting"
     }
   },
   "service": {
