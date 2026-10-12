@@ -379,6 +379,7 @@ function App() {
           location={Number(location)}
           tableName={tableName}
           explainerDeclined
+          declinedReason={gameMasterQueue?.gmCallReason}
           onClose={() => setDismissedDeclinedCallId(declinedCallId)}
           onSubmit={changeGameMasterRequest}
           onCancelCall={() => {
