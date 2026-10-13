@@ -1,28 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScreenImage } from "../types";
 
-const SLIDE_DURATION = 10000;
+const DEFAULT_DURATION_SECONDS = 10;
 
 type Props = {
   images: ScreenImage[];
 };
 
 export function ScreenImageSlideshow({ images }: Props) {
-  const [index, setIndex] = useState(0);
+  // Tracked by url, not index, so a reorder does not cut the current image short
+  const [currentUrl, setCurrentUrl] = useState<string | null>(null);
+  const imagesRef = useRef(images);
+  imagesRef.current = images;
 
+  // Falls back to the first image when nothing is shown yet or the current one was removed
+  const image = images.find(({ url }) => url === currentUrl) ?? images[0];
+  const imageUrl = image?.url;
+  const imageDuration = image?.duration;
+  const hasNextImage = images.length > 1;
+
+  // Each image stays for its own duration; the next one is preloaded meanwhile.
+  // The timer restarts only when the shown image or its duration changes.
   useEffect(() => {
-    if (images.length < 2) return;
+    if (!imageUrl || !hasNextImage) return;
 
-    const interval = setInterval(
-      () => setIndex((prev) => (prev + 1) % images.length),
-      SLIDE_DURATION
+    const nextImageOf = (list: ScreenImage[]) =>
+      list[(list.findIndex(({ url }) => url === imageUrl) + 1) % list.length];
+    new Image().src = nextImageOf(imagesRef.current).url;
+    const timeout = setTimeout(
+      () => setCurrentUrl(nextImageOf(imagesRef.current).url),
+      (imageDuration || DEFAULT_DURATION_SECONDS) * 1000
     );
-    return () => clearInterval(interval);
-  }, [images.length]);
+    return () => clearTimeout(timeout);
+  }, [imageUrl, imageDuration, hasNextImage]);
 
-  if (images.length === 0) return null;
-
-  const image = images[index % images.length];
+  if (!image) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black">
