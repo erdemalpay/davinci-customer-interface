@@ -12,9 +12,18 @@ export function ScreenImageSlideshow({ images }: Props) {
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
   const imagesRef = useRef(images);
   imagesRef.current = images;
+  // Url of the image after the shown one, kept for when the shown one is removed
+  const nextUrlRef = useRef<string | null>(null);
 
-  // Falls back to the first image when nothing is shown yet or the current one was removed
-  const image = images.find(({ url }) => url === currentUrl) ?? images[0];
+  let image = images.find(({ url }) => url === currentUrl);
+  if (!image && currentUrl) {
+    // The shown image was removed (e.g. its campaign ended): go on with the one
+    // that was next, so the rotation does not start over
+    image = images.find(({ url }) => url === nextUrlRef.current) ?? images[0];
+    setCurrentUrl(image?.url ?? null);
+  }
+  // Nothing is shown yet
+  image ??= images[0];
   const imageUrl = image?.url;
   const imageDuration = image?.duration;
   const hasNextImage = images.length > 1;
@@ -26,7 +35,8 @@ export function ScreenImageSlideshow({ images }: Props) {
 
     const nextImageOf = (list: ScreenImage[]) =>
       list[(list.findIndex(({ url }) => url === imageUrl) + 1) % list.length];
-    new Image().src = nextImageOf(imagesRef.current).url;
+    nextUrlRef.current = nextImageOf(imagesRef.current).url;
+    new Image().src = nextUrlRef.current;
     const timeout = setTimeout(
       () => setCurrentUrl(nextImageOf(imagesRef.current).url),
       (imageDuration || DEFAULT_DURATION_SECONDS) * 1000
