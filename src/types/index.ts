@@ -19,6 +19,8 @@ export enum ButtonCallActionEnum {
 
 export interface ScreenImage {
   url: string;
+  // seconds
+  duration: number;
 }
 
 export interface ButtonCallChangedPayload {
