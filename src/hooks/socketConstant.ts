@@ -172,6 +172,11 @@ export const socketEventListeners: SocketEventType[] = [
     invalidateKeys: [`${Paths.Asset}`],
   },
   {
+    // Campaign images on the TV show only while their popup is shown
+    event: "customerPopupChanged",
+    invalidateKeys: [`${Paths.Asset}`],
+  },
+  {
     event: "checklistChanged",
     invalidateKeys: [`${Paths.Checklist}`],
   },
