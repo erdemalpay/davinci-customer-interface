@@ -16,7 +16,7 @@ export default function ActiveButtonCallsPage() {
 
   // Already limited to today's active calls of this location.
   const activeButtonCalls = useGetScreenButtonCalls(selectedLocationId);
-  const screenImages = useGetScreenImages();
+  const screenImages = useGetScreenImages(selectedLocationId);
 
   const groupedCalls = {
     gameMasterAndTable: activeButtonCalls.filter(
