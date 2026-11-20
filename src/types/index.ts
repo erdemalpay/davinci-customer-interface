@@ -39,6 +39,8 @@ export type Feedback = {
   tableName: string;
   comment?: string;
   starRating?: number;
+  fullName?: string;
+  phone?: string;
   table: number;
   createdAt: Date;
 };
