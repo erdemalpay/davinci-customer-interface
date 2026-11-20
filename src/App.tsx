@@ -145,12 +145,19 @@ function App() {
     window.location.href = menuUrl;
   };
 
-  const handleFeedbackSubmit = (feedback: string, rating: number) => {
+  const handleFeedbackSubmit = (
+    feedback: string,
+    rating: number,
+    fullName: string,
+    phone: string
+  ) => {
     createFeedback({
       location: Number(location),
       tableName: tableName,
       starRating: rating,
       comment: feedback,
+      ...(fullName && { fullName }),
+      ...(phone && { phone }),
     });
     setFeedbackSuccess(true);
     setTimeout(() => {
